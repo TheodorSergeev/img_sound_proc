@@ -4,4 +4,11 @@ project(img_sound_proc)
 set(CMAKE_CXX_STANDARD 17)
 
 include_directories(../eigen-3.4.0)
+#include_directories(../opencv/mingw-build/include/opencv2)
+
+#set("OpenCV_DIR" "../opencv/mingw-build/")
+#find_package(OpenCV REQUIRED core imgcodecs)
+#include_directories(${OpenCV_INCLUDE_DIRS})
+
 add_executable(img_sound_proc main.cpp)
+#target_link_libraries(img_sound_proc ${OpenCV_LIBS})
