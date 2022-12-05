@@ -1,14 +1,16 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.20.0)
 project(img_sound_proc)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(../eigen-3.4.0)
+include_directories(eigen)
 #include_directories(../opencv/mingw-build/include/opencv2)
 
 #set("OpenCV_DIR" "../opencv/mingw-build/")
 #find_package(OpenCV REQUIRED core imgcodecs)
 #include_directories(${OpenCV_INCLUDE_DIRS})
 
-add_executable(img_sound_proc main.cpp)
+add_executable(img_sound_proc main.cpp Transform.cpp)
+add_executable(test test.cpp Transform.cpp)
+
 #target_link_libraries(img_sound_proc ${OpenCV_LIBS})
