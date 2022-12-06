@@ -22,7 +22,6 @@ public:
     virtual TOutput transform(const TInput& item_) = 0;
 };
 
-
 class Thresholding: public Transform<MatrixXi, MatrixXi> {
 private:
     int thr_min, thr_max;
@@ -54,7 +53,6 @@ public:
     };
 };
 
-
 class Histogram: public Transform<MatrixXi, MatrixXd> {
 public:
     explicit Histogram() = default;
@@ -83,11 +81,16 @@ public:
 template <typename TInput, typename TOutput>
 class Parser {
 protected:
+    int arg_num;
     string name;
 
 public:
     string get_name() {
         return name;
+    }
+
+    int get_arg_num() {
+        return arg_num;
     }
 
     virtual Transform<TInput, TOutput>* parse(vector <string> arguments) = 0;
@@ -96,13 +99,14 @@ public:
 class ThresholdingParser: public Parser<MatrixXi, MatrixXi> {
 public:
     ThresholdingParser() {
+        arg_num = 2;
         name = "threshold";
     }
 
     Transform<MatrixXi, MatrixXi>* parse(vector <string> arguments) override {
-        const int n_args = 2;
+        cout << "n_args = " << arguments.size() << "\n";
 
-        if (arguments.size() != n_args)
+        if (arguments.size() != arg_num)
             throw std::invalid_argument("Thresholding requires two integer arguments.");
                     
         // throw an exception if not convertible to int
@@ -122,6 +126,7 @@ int main() { //int argc, char* argv[]) {
     int argc = argv.size();
 
     std::array parsers_list = {ThresholdingParser()};
+    string opt_str(argv[1]);
 
     if (argc == 1) {
         cout << "Not enough arguments. Use \"./img_sound-proc --help\" to access the options.\n";
@@ -166,10 +171,7 @@ int main() { //int argc, char* argv[]) {
         }
     }
 
-    /*MatrixXi img(3,3);
-    img << 1, 2, 3,
-           4, 5, 6,
-           7, 8, 9;
+    /*
 
     cout << "Original\n" << img << "\n";
 
