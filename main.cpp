@@ -3,13 +3,11 @@
 #include <string>
 #include <exception>
 #include "Eigen/Dense"
-//#include <opencv2/opencv.hpp>
-//#include <opencv2/imgcodecs.hpp>
+#include <opencv2/opencv.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <filesystem>
 
-//using cv::imread;
-
-//#include <CImg.h>
-//using namespace cimg_library;
+using cv::imread;
 
 using std::cout;
 using std::string;
@@ -23,6 +21,7 @@ class Transform {
 public:
     virtual TOutput transform(const TInput& item_) = 0;
 };
+
 
 class Thresholding: public Transform<MatrixXi, MatrixXi> {
 private:
@@ -55,6 +54,7 @@ public:
     };
 };
 
+
 class Histogram: public Transform<MatrixXi, MatrixXd> {
 public:
     explicit Histogram() = default;
@@ -83,16 +83,11 @@ public:
 template <typename TInput, typename TOutput>
 class Parser {
 protected:
-    int arg_num;
     string name;
 
 public:
     string get_name() {
         return name;
-    }
-
-    int get_arg_num() {
-        return arg_num;
     }
 
     virtual const Transform<TInput, TOutput>* parse(vector <string> arguments) = 0;
@@ -101,14 +96,13 @@ public:
 class ThresholdingParser: public Parser<MatrixXi, MatrixXi> {
 public:
     ThresholdingParser() {
-        arg_num = 2;
         name = "threshold";
     }
 
-    Transform<MatrixXi, MatrixXi>* parse(vector <string> arguments) override {
-        cout << "n_args = " << arguments.size() << "\n";
+    const Transform<MatrixXi, MatrixXi>* parse(vector <string> arguments) override {
+        const int n_args = 2;
 
-        if (arguments.size() != arg_num)
+        if (arguments.size() != n_args)
             throw std::invalid_argument("Thresholding requires two integer arguments.");
 
         int thr_min = std::stoi(arguments[0]); // throws an exception if not an int
@@ -121,24 +115,21 @@ public:
 
 int main() { //int argc, char* argv[]) {
     //Matrix<int, -1, 1> img;
-    MatrixXi img(3,3);
-    img << 1, 2, 3,
-           4, 5, 6,
-           7, 8, 9;
 
     const char* HELP_STR = "--help";
     const char* HELP_MSG = "asdasd";
 
     int argc = 4;
-    const char* argv[] = {"path", "threshold", "3", "6"};
-    // ./img_sound_proc input.png output.txt threshold 3 9
+    const char* argv[] = {"path", "threshold", "3", "9"};
 
     std::array parsers_list = {ThresholdingParser()};
-    string opt_str(argv[1]);
 
     if (argc == 1) {
         cout << "Not enough arguments. Use \"./img_sound-proc --help\" to access the options.\n";
     } else {
+        string opt_str(argv[1]);
+        cout << opt_str << "\n";
+
         vector<string> arg_vec;
         for (int i = 2; i < argc; ++i) {
             arg_vec.emplace_back(argv[i]);
@@ -146,19 +137,20 @@ int main() { //int argc, char* argv[]) {
 
         if (opt_str == HELP_STR) {
             cout << HELP_MSG << "\n";
-        } else {
-            for (auto &parser: parsers_list) {
-                if (opt_str == parser.get_name()) {
-                    cout << "found " << parser.get_name() << "\n";
-                    auto transformer = parser.parse(arg_vec);
-                    auto new_img = transformer->transform(img);
-                    cout << new_img << "\n";
-                }
+        }
+
+        for (auto & parser : parsers_list) {
+            if (opt_str == parser.get_name()) {
+                cout << "found " << parser.get_name() << "\n";
+                //pars.parse();
             }
         }
     }
 
-    /*
+    /*MatrixXi img(3,3);
+    img << 1, 2, 3,
+           4, 5, 6,
+           7, 8, 9;
 
     cout << "Original\n" << img << "\n";
 
@@ -168,11 +160,12 @@ int main() { //int argc, char* argv[]) {
     Histogram hist;
     cout << "Histogram\n" << hist.transform(img);*/
 
-    //string img_path("cameraman.tif");
-    //CImg<float> ImgTest;
-    //ImgTest.load_tiff(img_path.c_str());
+    string rel_path("/data/images/cameraman.tif");
+    string abs_path(std::filesystem::current_path());
+    string img_path(abs_path + rel_path);
 
-    //cv::Mat image;// = cv::imread(img_path, cv::IMREAD_COLOR);
+    cout << img_path << "\n";
+    cv::Mat image = cv::imread(img_path, cv::IMREAD_GRAYSCALE);
 
     return 0;
 }
