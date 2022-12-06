@@ -90,7 +90,7 @@ public:
         return name;
     }
 
-    virtual const Transform<TInput, TOutput>* parse(vector <string> arguments) = 0;
+    virtual Transform<TInput, TOutput>* parse(vector <string> arguments) = 0;
 };
 
 class ThresholdingParser: public Parser<MatrixXi, MatrixXi> {
@@ -99,14 +99,15 @@ public:
         name = "threshold";
     }
 
-    const Transform<MatrixXi, MatrixXi>* parse(vector <string> arguments) override {
+    Transform<MatrixXi, MatrixXi>* parse(vector <string> arguments) override {
         const int n_args = 2;
 
         if (arguments.size() != n_args)
             throw std::invalid_argument("Thresholding requires two integer arguments.");
-
-        int thr_min = std::stoi(arguments[0]); // throws an exception if not an int
-        int thr_max = std::stoi(arguments[1]); // throws an exception if not an int
+                    
+        // throw an exception if not convertible to int
+        int thr_min = std::stoi(arguments[0]);
+        int thr_max = std::stoi(arguments[1]);
 
         return new Thresholding(thr_min, thr_max);
     }
@@ -114,13 +115,11 @@ public:
 
 
 int main() { //int argc, char* argv[]) {
-    //Matrix<int, -1, 1> img;
-
     const char* HELP_STR = "--help";
     const char* HELP_MSG = "asdasd";
 
-    int argc = 4;
-    const char* argv[] = {"path", "threshold", "3", "9"};
+    vector <const char*> argv = {"path", "threshold", "inp.tif", "out.png", "3", "6"};
+    int argc = argv.size();
 
     std::array parsers_list = {ThresholdingParser()};
 
@@ -128,21 +127,41 @@ int main() { //int argc, char* argv[]) {
         cout << "Not enough arguments. Use \"./img_sound-proc --help\" to access the options.\n";
     } else {
         string opt_str(argv[1]);
-        cout << opt_str << "\n";
 
-        vector<string> arg_vec;
-        for (int i = 2; i < argc; ++i) {
-            arg_vec.emplace_back(argv[i]);
-        }
+        cout << opt_str << "\n";
 
         if (opt_str == HELP_STR) {
             cout << HELP_MSG << "\n";
-        }
+        } else {
+            for (auto & parser : parsers_list) {
+                if (opt_str == parser.get_name()) {
+                    if (argc < 4) {
+                        cout << "not enough parameters\n";
+                    } else {
+                        cout << "found " << parser.get_name() << "\n";
 
-        for (auto & parser : parsers_list) {
-            if (opt_str == parser.get_name()) {
-                cout << "found " << parser.get_name() << "\n";
-                //pars.parse();
+                        string inp_fname = argv[2];
+                        string out_fname = argv[3];
+
+                        vector<string> arg_vec;
+                        for (int i = 4; i < argc; ++i) {
+                            arg_vec.emplace_back(argv[i]);
+                        }
+                        
+                        // auto inp_img = read(inp_fname);
+
+                        MatrixXi inp_img(3,3);
+                        inp_img << 1, 2, 3,
+                                   4, 5, 6,
+                                   7, 8, 9;
+                        
+                        auto transformer = parser.parse(arg_vec);
+                        auto out_img = transformer->transform(inp_img);
+                        cout << out_img << "\n";
+                        // write(out_fname);
+                    }  
+                    break;
+                }
             }
         }
     }
@@ -160,12 +179,12 @@ int main() { //int argc, char* argv[]) {
     Histogram hist;
     cout << "Histogram\n" << hist.transform(img);*/
 
-    string rel_path("/data/images/cameraman.tif");
+    /*string rel_path("/data/images/cameraman.tif");
     string abs_path(std::filesystem::current_path());
     string img_path(abs_path + rel_path);
 
     cout << img_path << "\n";
-    cv::Mat image = cv::imread(img_path, cv::IMREAD_GRAYSCALE);
+    cv::Mat image = cv::imread(img_path, cv::IMREAD_GRAYSCALE);*/
 
     return 0;
 }
