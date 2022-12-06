@@ -4,6 +4,7 @@ project(img_sound_proc)
 set(CMAKE_CXX_STANDARD 17)
 
 include_directories(../eigen-3.4.0)
+include_directories(../AudioFile)
 include_directories(../opencv/build/include/opencv2)
 
 set("OpenCV_DIR" "../opencv/build/")

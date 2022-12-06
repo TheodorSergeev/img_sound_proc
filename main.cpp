@@ -3,6 +3,7 @@
 #include <string>
 #include <exception>
 #include "Eigen/Dense"
+#include "AudioFile.h"
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <filesystem>
@@ -12,6 +13,7 @@ using cv::imread;
 using std::cout;
 using std::string;
 using std::vector;
+using std::to_string;
 using Eigen::MatrixXi;
 using Eigen::MatrixXd;
 
@@ -84,6 +86,62 @@ protected:
     int arg_num;
     string name;
 
+    void checkArgNum(const vector<string>& arguments) {
+        if (arguments.size() != 2 + get_arg_num()) {
+            throw std::invalid_argument(
+                "Incorect number of parameters for " + get_name() + \
+                "\nRequired: " + to_string(2 + get_arg_num()) + \
+                "\nProvided: " + to_string(arguments.size() - 2) + "\n"
+            );
+        }
+    }
+
+    MatrixXi readIntMatrix(const string& inp_fname) {
+        string extension(std::filesystem::path(inp_fname).extension());
+
+        cout << inp_fname << " " << cv::haveImageReader(inp_fname) << "\n";
+
+        /*if (cv::haveImageReader(inp_fname)) {
+            //cv::Mat image = cv::imread(inp_fname, cv::IMREAD_GRAYSCALE);
+            // return opencvMat2Eigen
+            cout << "todo: open cv load and convert to eigen\n";
+        } else {
+            throw std::invalid_argument("Cannot read an integer matrix from " + inp_fname);
+        }*/
+        // todo: check if audio can be loaded as ints
+
+        MatrixXi tmp_inp_img(3,3);
+        tmp_inp_img << 1, 2, 3,
+                       4, 5, 6,
+                       7, 8, 9;
+        return tmp_inp_img;
+    }
+
+    void writeIntMatrix(const string& out_fname, const MatrixXi& matrix) {
+        cout << matrix << "\n";
+
+        // todo: implement saving in a given format
+    }
+
+    MatrixXd readFloatMatrix(const string& inp_fname) {
+        string extension(std::filesystem::path(inp_fname).extension());
+
+        if (extension == "wav" || extension == "aiff") {
+            AudioFile<float> audioFile;
+            audioFile.load(inp_fname);
+            // return aufiodileMat2Eigen
+        } else {
+            throw std::invalid_argument("Cannot read an integer matrix from " + inp_fname);
+        }
+        // todo: check if audio can be loaded as ints
+
+        MatrixXd tmp_inp_img(3,3);
+        tmp_inp_img << 1.0, 2.0, 3.0,
+                       4.0, 5.0, 6.0,
+                       7.0, 8.0, 9.0;
+        return tmp_inp_img;
+    }
+
 public:
     string get_name() {
         return name;
@@ -93,7 +151,7 @@ public:
         return arg_num;
     }
 
-    virtual Transform<TInput, TOutput>* parse(vector <string> arguments) = 0;
+    virtual Transform<TInput, TOutput>* parse(const vector<string>& arguments) = 0;
 };
 
 class ThresholdingParser: public Parser<MatrixXi, MatrixXi> {
@@ -103,17 +161,29 @@ public:
         name = "threshold";
     }
 
-    Transform<MatrixXi, MatrixXi>* parse(vector <string> arguments) override {
+    Transform<MatrixXi, MatrixXi>* parse(const vector<string>& arguments) override {
         cout << "n_args = " << arguments.size() << "\n";
 
-        if (arguments.size() != arg_num)
-            throw std::invalid_argument("Thresholding requires two integer arguments.");
+        if (arguments.size() != 2 + arg_num)
+            throw std::invalid_argument("Thresholding requires exactly two integer arguments.");
                     
         // throw an exception if not convertible to int
-        int thr_min = std::stoi(arguments[0]);
-        int thr_max = std::stoi(arguments[1]);
+        int thr_min = std::stoi(arguments[2]);
+        int thr_max = std::stoi(arguments[3]);
 
         return new Thresholding(thr_min, thr_max);
+    }
+
+    void apply(const vector <string>& arguments) {
+        checkArgNum(arguments); 
+
+        string inp_fname = arguments[0];
+        string out_fname = arguments[1];
+
+        MatrixXi input = readIntMatrix(inp_fname);
+        auto thresh = parse(arguments);
+        MatrixXi output = thresh->transform(input);
+        writeIntMatrix(out_fname, output);
     }
 };
 
@@ -140,31 +210,14 @@ int main() { //int argc, char* argv[]) {
         } else {
             for (auto & parser : parsers_list) {
                 if (opt_str == parser.get_name()) {
-                    if (argc < 4) {
-                        cout << "not enough parameters\n";
-                    } else {
-                        cout << "found " << parser.get_name() << "\n";
+                    cout << "found " << parser.get_name() << "\n";
 
-                        string inp_fname = argv[2];
-                        string out_fname = argv[3];
-
-                        vector<string> arg_vec;
-                        for (int i = 4; i < argc; ++i) {
-                            arg_vec.emplace_back(argv[i]);
-                        }
-                        
-                        // auto inp_img = read(inp_fname);
-
-                        MatrixXi inp_img(3,3);
-                        inp_img << 1, 2, 3,
-                                   4, 5, 6,
-                                   7, 8, 9;
-                        
-                        auto transformer = parser.parse(arg_vec);
-                        auto out_img = transformer->transform(inp_img);
-                        cout << out_img << "\n";
-                        // write(out_fname);
-                    }  
+                    vector<string> arg_vec;
+                    for (int i = 2; i < argc; ++i) {
+                        arg_vec.emplace_back(argv[i]);
+                    }
+                    
+                    parser.apply(arg_vec);
                     break;
                 }
             }
@@ -183,10 +236,7 @@ int main() { //int argc, char* argv[]) {
 
     /*string rel_path("/data/images/cameraman.tif");
     string abs_path(std::filesystem::current_path());
-    string img_path(abs_path + rel_path);
-
-    cout << img_path << "\n";
-    cv::Mat image = cv::imread(img_path, cv::IMREAD_GRAYSCALE);*/
+    string img_path(abs_path + rel_path); */
 
     return 0;
 }
