@@ -132,7 +132,6 @@ protected:
         }
     }
 
-
     MatrixXd readFloatMatrix(const string& inp_fname) {
         string extension(std::filesystem::path(inp_fname).extension());
 
