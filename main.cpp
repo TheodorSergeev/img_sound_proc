@@ -178,7 +178,6 @@ int main() { //int argc, char* argv[]) {
     }
 
     /*
-
     cout << "Original\n" << img << "\n";
 
     Thresholding threshold(3,6);
@@ -186,10 +185,6 @@ int main() { //int argc, char* argv[]) {
 
     Histogram hist;
     cout << "Histogram\n" << hist.transform(img);*/
-
-    /*string rel_path("/data/images/cameraman.tif");
-    string abs_path(std::filesystem::current_path());
-    string img_path(abs_path + rel_path); */
 
     return 0;
 }
