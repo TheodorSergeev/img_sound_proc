@@ -14,6 +14,7 @@ Authors: Yihan Wang, Fedor Sergeev
 - [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page)
 - [AudioFile](https://github.com/adamstark/AudioFile)
 - [OpenCV](https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html)
+- [GoogleTest](http://google.github.io/googletest/)
 
 
 ## How to run
@@ -33,7 +34,7 @@ Authors: Yihan Wang, Fedor Sergeev
         ```
         - Build from the source code: `cmake ../opencv-4.x && cmake -- build .` (consider using cmake's `-j` option to speed up building)
     - [Windows](https://docs.opencv.org/4.x/d3/d52/tutorial_windows_install.html)
-5. (Optional) Modify paths in the `CMakeLists.txt`, if needed (e.g., different versions or installation paths):
+5. (Optional) Modify paths in the `CMakeLists.txt`, if needed (e.g., different versions or installation paths)
 
     ```
     # ...
@@ -46,7 +47,12 @@ Authors: Yihan Wang, Fedor Sergeev
 
     # ...
     ```
-6. Build the source files `cd img_sound_proc && cmake . && make`
+
+6. Install GoogleTest
+    - Linux: `sudo apt install libgtest-dev`
+    - Windows: consult [GoogleTest docs](http://google.github.io/googletest/platforms.html)
+
+7. Build the source files `cd img_sound_proc && cmake . && make`
 
 ### Usage
 
@@ -58,6 +64,10 @@ Examples:
 
 - Apply a threshold [30, 200]: `./img_sound_proc /data/images/cameraman.tif /out.png 30 200`
 - ...
+
+Running tests:
+
+- After building simply run `ctest` in the `img_sound_proc` folder
 
 ## Contents
 
