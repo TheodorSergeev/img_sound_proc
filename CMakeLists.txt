@@ -11,5 +11,5 @@ set("OpenCV_DIR" "../opencv/build/")
 find_package(OpenCV REQUIRED core imgcodecs)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-add_executable(img_sound_proc main.cpp)
+add_executable(img_sound_proc main.cpp utils.cpp)
 target_link_libraries(img_sound_proc ${OpenCV_LIBS})

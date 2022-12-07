@@ -7,8 +7,8 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <filesystem>
+#include "utils.hpp"
 
-using cv::imread;
 
 using std::cout;
 using std::string;
@@ -16,6 +16,7 @@ using std::vector;
 using std::to_string;
 using Eigen::MatrixXi;
 using Eigen::MatrixXd;
+using cv::imread;
 
 
 template <typename TInput, typename TOutput>
@@ -78,21 +79,6 @@ public:
         return hist;
     };
 };
-
-
-MatrixXi opencv2eigen(const cv::Mat& image) {
-    int n_cols = image.cols;
-    int n_rows = image.rows;
-    MatrixXi mat(n_cols, n_rows);
-
-    for (int i = 0; i < n_cols; ++i) {
-        for (int j = 0; j < n_rows; ++j) {
-            mat(i, j) = (int) image.at<char>(i, j);
-        }
-    }
-
-    return mat;
-}
 
 
 template <typename TInput, typename TOutput>
