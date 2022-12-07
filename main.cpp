@@ -115,10 +115,23 @@ protected:
     }
 
     void writeIntMatrix(const string& out_fname, const MatrixXi& matrix) {
-        cout << matrix << "\n";
+        bool result = true;
 
-        // todo: implement saving in a given format
+        if (cv::haveImageWriter(out_fname)) {
+            cv::Mat cv_mat = eigen2opencv(matrix);
+            result = cv::imwrite(out_fname, cv_mat);
+        } else {
+            throw std::invalid_argument("Cannot write an integer matrix to " + out_fname);
+        }
+        // todo: check if audio can be loaded as ints
+
+        if (result) {
+            cout << "File saved: " << out_fname << "\n"; 
+        } else {
+            cout << "Can't save file: " << out_fname << "\n"; 
+        }
     }
+
 
     MatrixXd readFloatMatrix(const string& inp_fname) {
         string extension(std::filesystem::path(inp_fname).extension());
@@ -191,7 +204,7 @@ int main() { //int argc, char* argv[]) {
     const char* HELP_STR = "--help";
     const char* HELP_MSG = "asdasd";
 
-    vector <const char*> argv = {"path", "threshold", "/data/images/cameraman.tif", "out.png", "30", "200"};
+    vector <const char*> argv = {"path", "threshold", "/data/images/cameraman.tif", "/out.png", "30", "200"};
     int argc = argv.size();
 
     std::array parsers_list = {ThresholdingParser()};
