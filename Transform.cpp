@@ -75,8 +75,13 @@ void mainFFT1D(std::complex<float> signal[], int start, int fin, int step1, floa
         signal[start+(k+n/2)*step1] = buffer[2*k] - factor * buffer[2*k+1];
         factor *= subfactor;
     }
+}
 
-
+void normalize(std::complex<float> f[], int n, float norm) {
+    for(int i=0; i<n; i++){
+        f[i].real(float(f[i].real()/norm));
+        f[i].imag(float(f[i].imag()/norm));
+        }
 }
 
 Eigen::Matrix<std::complex<double>,1, Dynamic> FFT1D::transform(const MatrixXi& item){
@@ -99,7 +104,8 @@ Eigen::Matrix<std::complex<double>,1, Dynamic> FFT1D::transform(const MatrixXi& 
     for (int i =0; i<size; i++){
         buffer[i]=0;
     }
-    mainFFT1D(spatial, 0, size-1, step, float(1), buffer);
+    mainFFT1D(spatial, 0, size-1, step, float(-1), buffer);
+    normalize(spatial,size, std::sqrt(size));
     delete[] buffer;
 
     mfrequencyDomain.resize(1,size);
@@ -113,6 +119,35 @@ Eigen::Matrix<std::complex<double>,1, Dynamic> FFT1D::transform(const MatrixXi& 
     }
     delete[] spatial;
     transformed = 1;
-    return mfrequencyDomain;
 
+    return mfrequencyDomain;
+}
+
+Eigen::Matrix<int,1, Dynamic> iFFT1D::transform(const Eigen::Matrix<std::complex<double>,1, -1>& item){
+    int nrows = item.rows();
+    int ncols = item.cols();
+    int size = nrows * ncols;
+
+    /*convert image matrix to a complex array*/
+    std::complex<float>* frequency = new std::complex<float>[size];
+    for(int i=0; i < nrows; ++i) {
+        for (int j = 0; j < ncols; ++j) {
+            frequency[i*ncols+j]=item[i,j];
+        }
+    }
+    std::complex <float>* buffer = new std::complex <float>[size];
+    for (int i =0; i<size; i++){
+        buffer[i]=0;
+    }
+    mainFFT1D(frequency, 0, size-1, 1, float(1), buffer);
+    normalize(frequency,size, std::sqrt(size));
+    delete[] buffer;
+
+    mspatialDomain.resize(1,size);
+    for (int i =0; i<size; i++){
+        mspatialDomain[0,i]=int(frequency[i].real());
+    }
+    delete[] frequency;
+    std::cout<< mspatialDomain;
+    return mspatialDomain;
 }
