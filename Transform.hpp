@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <exception>
+#include <complex>
 #include "Eigen/Dense"
 //#include <opencv2/opencv.hpp>
 //#include <opencv2/imgcodecs.hpp>
@@ -44,7 +45,17 @@ public:
     MatrixXd transform(const MatrixXi& item) override;
 };
 
-class FFT2D: public Transform<MatrixXi, Eigen::Matrix<std::complex<double>, Dynamic, Dynamic>>{
+class FFT1D: public Transform<MatrixXi, void> {
+private:
+    Eigen::Matrix<std::complex<double>,1, Dynamic> mfrequencyDomain;
+    Eigen::Matrix<std::complex<double>,1, Dynamic> mMagnitude;
+    int step;
+public:
+    explicit FFT1D() = default;
+    explicit FFT1D(const int n){
+        step = n;
+    }
+    void transform(const MatrixXi& item) override;
 
 };
 

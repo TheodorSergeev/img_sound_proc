@@ -53,3 +53,56 @@ MatrixXd Histogram::transform(const MatrixXi &item) {
 
     return hist;
 }
+
+/* define mainbody of FFT1D */
+void mainFFT1D(std::complex<float> signal[], int start, int fin, int step1, float inv, std::complex<float> buffer[]){
+    int n = (fin-start)/step1+1;
+    if (n == 1){ //Termination condition: only one element left in the considered array
+        return;
+    }
+    mainFFT1D(signal,start,fin,2*step1,inv,buffer); // recursively call on even indices
+    mainFFT1D(signal, start+step1,fin,2*step1,inv,buffer);// recursively call on odd indices
+
+    /*building factor*/
+    std::complex<float> subfactor = std::polar(float(1),float(inv*2*M_PI/n));
+    std::complex<float> factor = 1;
+
+    for (int k=0; k<n; k++){
+        buffer[k]=signal[start+k*step1];
+    }
+    for (int k=0; k <n/2;k++){
+        signal[start+k*step1] = buffer[2*k] + factor * buffer[2*k+1];
+        signal[start+(k+n/2)*step1] = buffer[2*k] - factor * buffer[2*k+1];
+        factor *= subfactor;
+    }
+
+
+}
+
+void FFT1D::transform(const MatrixXi& item){
+    int nrows = item.rows();
+    int ncols = item.cols();
+    int size = nrows * ncols;
+
+
+    /*convert image matrix to a complex array*/
+    std::complex<float>* spatial = new std::complex<float>[size];
+    std::complex<float> a;
+    for(int i=0; i < nrows; ++i) {
+        for (int j = 0; j < ncols; ++j) {
+            a.real(item(i,j));
+            a.imag(0);
+            spatial[i*ncols+j]=a;
+        }
+    }
+    std::complex <float>* buffer = new std::complex <float>[size];
+    for (int i =0; i<size; i++){
+        buffer[i]=0;
+    }
+    mainFFT1D(spatial, 0, size-1, step, float(1), buffer);
+    delete[] buffer;
+    for (int i =0; i<size; i++){
+        std::cout<< spatial[i] ;
+    }
+
+}
