@@ -80,6 +80,21 @@ public:
 };
 
 
+MatrixXi opencv2eigen(const cv::Mat& image) {
+    int n_cols = image.cols;
+    int n_rows = image.rows;
+    MatrixXi mat(n_cols, n_rows);
+
+    for (int i = 0; i < n_cols; ++i) {
+        for (int j = 0; j < n_rows; ++j) {
+            mat(i, j) = (int) image.at<char>(i, j);
+        }
+    }
+
+    return mat;
+}
+
+
 template <typename TInput, typename TOutput>
 class Parser {
 protected:
@@ -101,19 +116,15 @@ protected:
 
         cout << inp_fname << " " << cv::haveImageReader(inp_fname) << "\n";
 
-        /*if (cv::haveImageReader(inp_fname)) {
-            //cv::Mat image = cv::imread(inp_fname, cv::IMREAD_GRAYSCALE);
-            // return opencvMat2Eigen
-            cout << "todo: open cv load and convert to eigen\n";
+        if (cv::haveImageReader(inp_fname)) {
+            cv::Mat image = cv::imread(inp_fname, cv::IMREAD_GRAYSCALE);
+            return opencv2eigen(image);
         } else {
             throw std::invalid_argument("Cannot read an integer matrix from " + inp_fname);
-        }*/
+        }
         // todo: check if audio can be loaded as ints
 
-        MatrixXi tmp_inp_img(3,3);
-        tmp_inp_img << 1, 2, 3,
-                       4, 5, 6,
-                       7, 8, 9;
+        MatrixXi tmp_inp_img;
         return tmp_inp_img;
     }
 
@@ -177,8 +188,10 @@ public:
     void apply(const vector <string>& arguments) {
         checkArgNum(arguments); 
 
-        string inp_fname = arguments[0];
-        string out_fname = arguments[1];
+        // todo: why opencv doesn't want to read from the relative path?
+        string glob_path = std::filesystem::current_path();
+        string inp_fname = glob_path + arguments[0];
+        string out_fname = glob_path + arguments[1];
 
         MatrixXi input = readIntMatrix(inp_fname);
         auto thresh = parse(arguments);
@@ -192,7 +205,7 @@ int main() { //int argc, char* argv[]) {
     const char* HELP_STR = "--help";
     const char* HELP_MSG = "asdasd";
 
-    vector <const char*> argv = {"path", "threshold", "inp.tif", "out.png", "3", "6"};
+    vector <const char*> argv = {"path", "threshold", "/data/images/cameraman.tif", "out.png", "30", "200"};
     int argc = argv.size();
 
     std::array parsers_list = {ThresholdingParser()};
