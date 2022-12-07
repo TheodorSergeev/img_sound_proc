@@ -20,7 +20,9 @@ int main() {
     imag.resize(2,4);
     imag << 0,1,2,3,
             4,5,6,7;
-    FFT1D(1).transform(imag);
+    FFT1D test(1);
+    /*test.transform(imag);*/
+    test.getMagnitude();
 
     return 0;
 

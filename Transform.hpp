@@ -45,17 +45,30 @@ public:
     MatrixXd transform(const MatrixXi& item) override;
 };
 
-class FFT1D: public Transform<MatrixXi, void> {
+class FFT1D: public Transform<MatrixXi, Eigen::Matrix<std::complex<double>,1, Dynamic>> {
 private:
     Eigen::Matrix<std::complex<double>,1, Dynamic> mfrequencyDomain;
     Eigen::Matrix<std::complex<double>,1, Dynamic> mMagnitude;
     int step;
+    int transformed =0;
 public:
     explicit FFT1D() = default;
     explicit FFT1D(const int n){
         step = n;
     }
-    void transform(const MatrixXi& item) override;
+    Eigen::Matrix<std::complex<double>,1, Dynamic> transform(const MatrixXi& item) override;
+    Eigen::Matrix<std::complex<double>,1, Dynamic> getMagnitude(){
+        if (transformed != 1){
+            try {
+                throw std::logic_error("perform transform first");
+            }
+            catch (const std::logic_error &e) {
+                std::cout << e.what() << std::endl;
+            }
+        }
+        return mMagnitude;
+
+    }
 
 };
 

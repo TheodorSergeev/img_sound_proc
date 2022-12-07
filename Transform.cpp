@@ -79,7 +79,7 @@ void mainFFT1D(std::complex<float> signal[], int start, int fin, int step1, floa
 
 }
 
-void FFT1D::transform(const MatrixXi& item){
+Eigen::Matrix<std::complex<double>,1, Dynamic> FFT1D::transform(const MatrixXi& item){
     int nrows = item.rows();
     int ncols = item.cols();
     int size = nrows * ncols;
@@ -101,8 +101,18 @@ void FFT1D::transform(const MatrixXi& item){
     }
     mainFFT1D(spatial, 0, size-1, step, float(1), buffer);
     delete[] buffer;
+
+    mfrequencyDomain.resize(1,size);
+    mMagnitude.resize(1,size);
+
     for (int i =0; i<size; i++){
-        std::cout<< spatial[i] ;
+        mfrequencyDomain[0,i] = spatial[i];
     }
+    for (int i =0; i<size; i++){
+        mMagnitude[0,i] = std::abs(spatial[i]);
+    }
+    delete[] spatial;
+    transformed = 1;
+    return mfrequencyDomain;
 
 }
