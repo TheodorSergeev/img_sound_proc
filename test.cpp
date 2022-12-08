@@ -21,8 +21,10 @@ int main() {
     imag << 0,1,2,3,
             4,5,6,7;
     FFT1D test(1);
-    /*test.transform(imag);*/
+    std::cout <<test.transform(imag);
     test.getMagnitude();
+    iFFT1D itest;
+    itest.transform(test.transform(imag));
 
     return 0;
 

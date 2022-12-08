@@ -64,7 +64,7 @@ void mainFFT1D(std::complex<float> signal[], int start, int fin, int step1, floa
     mainFFT1D(signal, start+step1,fin,2*step1,inv,buffer);// recursively call on odd indices
 
     /*building factor*/
-    std::complex<float> subfactor = std::polar(float(1),float(inv*2*M_PI/n));
+    std::complex<float> subfactor = std::polar(float(1),float(inv*2*M_PI/float(n)));
     std::complex<float> factor = 1;
 
     for (int k=0; k<n; k++){
@@ -105,7 +105,7 @@ Eigen::Matrix<std::complex<double>,1, Dynamic> FFT1D::transform(const MatrixXi& 
         buffer[i]=0;
     }
     mainFFT1D(spatial, 0, size-1, step, float(-1), buffer);
-    normalize(spatial,size, std::sqrt(size));
+    normalize(spatial,size, float(std::sqrt(size)));
     delete[] buffer;
 
     mfrequencyDomain.resize(1,size);
@@ -140,12 +140,12 @@ Eigen::Matrix<int,1, Dynamic> iFFT1D::transform(const Eigen::Matrix<std::complex
         buffer[i]=0;
     }
     mainFFT1D(frequency, 0, size-1, 1, float(1), buffer);
-    normalize(frequency,size, std::sqrt(size));
+    normalize(frequency,size, float(std::sqrt(size)));
     delete[] buffer;
 
     mspatialDomain.resize(1,size);
     for (int i =0; i<size; i++){
-        mspatialDomain[0,i]=int(frequency[i].real());
+        mspatialDomain[0,i]=round(frequency[i].real());
     }
     delete[] frequency;
     std::cout<< mspatialDomain;
