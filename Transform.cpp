@@ -151,3 +151,51 @@ Eigen::Matrix<int,1, Dynamic> iFFT1D::transform(const Eigen::Matrix<std::complex
     std::cout<< mspatialDomain;
     return mspatialDomain;
 }
+
+Eigen::Matrix<std::complex<double>,-1, -1> FFT2D::transform(const MatrixXi& item){
+    int nrows = item.rows();
+    int ncols = item.cols();
+    int size = nrows * ncols;
+
+    std::complex<float>* spatial = new std::complex<float>[size];
+    std::complex<float> a;
+    for(int i=0; i < nrows; ++i) {
+        for (int j = 0; j < ncols; ++j) {
+            a.real(item(i,j));
+            a.imag(0);
+            spatial[i*ncols+j]=a;
+        }
+    }
+    std::complex<float>* buffer;
+    for (int i=0; i < nrows; ++i){
+        buffer = new std::complex<float>[ncols];
+        mainFFT1D(spatial,i*ncols,(i+1)*ncols-1,step,-1,buffer);
+        delete[] buffer;
+    }
+    for (int j=0; j < ncols; ++j){
+        buffer = new std::complex<float>[nrows];
+        mainFFT1D(spatial,ncols,ncols*(nrows-1)+j,ncols,-1,buffer);
+        delete[] buffer;
+    }
+    normalize(spatial,size,float(std::sqrt(size)));
+
+    mfrequencyDomain.resize(nrows,ncols);
+    mMagnitude.resize(nrows,ncols);
+
+    for(int i=0; i < nrows; ++i) {
+        for (int j = 0; j < ncols; ++j) {
+            mfrequencyDomain(i,j) = spatial[i*ncols+j];
+        }
+    }
+    for(int i=0; i < nrows; ++i) {
+        for (int j = 0; j < ncols; ++j) {
+            mMagnitude(i,j) = std::abs(spatial[i*ncols+j]);
+        }
+    }
+
+    delete[] spatial;
+    transformed = 1;
+
+    return mfrequencyDomain;
+
+}

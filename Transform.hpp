@@ -81,4 +81,30 @@ public:
 
 };
 
+class FFT2D: public Transform<MatrixXi, Eigen::Matrix<std::complex<double>,-1, -1>> {
+private:
+    Eigen::Matrix<std::complex<double>,-1, -1> mfrequencyDomain;
+    Eigen::Matrix<std::complex<double>,-1, -1> mMagnitude;
+    int step;
+    int transformed =0;
+public:
+    explicit FFT2D() = default;
+    explicit FFT2D(const int n){
+        step = n;
+    }
+    Eigen::Matrix<std::complex<double>,-1, -1> transform(const MatrixXi& item) override;
+    Eigen::Matrix<std::complex<double>,-1, -1> getMagnitude(){
+        if (transformed != 1){
+            try {
+                throw std::logic_error("perform transform first");
+            }
+            catch (const std::logic_error &e) {
+                std::cout << e.what() << std::endl;
+            }
+        }
+        return mMagnitude;
+
+    }
+
+};
 #endif
