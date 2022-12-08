@@ -107,4 +107,13 @@ public:
     }
 
 };
+
+class iFFT2D: public Transform<Eigen::Matrix<std::complex<double>,-1, -1>, Eigen::Matrix<int,-1, -1>> {
+private:
+    Eigen::Matrix<int,-1, -1> mspatialDomain;
+public:
+    explicit iFFT2D() = default;
+    Eigen::Matrix<int,-1, -1> transform(const Eigen::Matrix<std::complex<double>,-1, -1>& item) override;
+
+};
 #endif

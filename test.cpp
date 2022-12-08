@@ -18,12 +18,18 @@ int main() {
     }
     Eigen::MatrixXi imag;
     imag.resize(2,4);
+    imag.resize(4,4);
     imag << 0,1,2,3,
-            4,5,6,7;
-    FFT1D test(1);
-    std::cout <<test.transform(imag);
+            9,8,7,6,
+            4,2,5,6,
+            6,8,3,1;
+
+    FFT1D test1(1);
+    std::cout <<test1.transform(imag)<<std::endl;
+    FFT2D test(1);
+    std::cout <<test.transform(imag)<<std::endl;
     test.getMagnitude();
-    iFFT1D itest;
+    iFFT2D itest;
     itest.transform(test.transform(imag));
 
     return 0;
