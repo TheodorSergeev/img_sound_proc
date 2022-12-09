@@ -31,6 +31,12 @@ int main() {
     test.getMagnitude();
     iFFT2D itest;
     itest.transform(test.transform(imag));
+    std::cout <<std::endl;
+    LowpassFilter testLow(1.2);
+    testLow.transform(imag);
+    std::cout <<std::endl;
+    HighpassFilter testHigh(1.2);
+    testHigh.transform(imag);
 
     return 0;
 

@@ -116,4 +116,27 @@ public:
     Eigen::Matrix<int,-1, -1> transform(const Eigen::Matrix<std::complex<double>,-1, -1>& item) override;
 
 };
+
+class LowpassFilter : public Transform<MatrixXi,MatrixXi> {
+private:
+    double thr;
+    int stp;
+public:
+    explicit LowpassFilter(const double threshold, int step = 1) {
+        thr = threshold;
+        step = 1;
+    }
+    MatrixXi transform(const MatrixXi& item) override;
+};
+class HighpassFilter : public Transform<MatrixXi,MatrixXi> {
+private:
+    double thr;
+    int stp;
+public:
+    explicit HighpassFilter(const double threshold, int step = 1) {
+        thr = threshold;
+        stp = step;
+    }
+    MatrixXi transform(const MatrixXi& item) override;
+};
 #endif

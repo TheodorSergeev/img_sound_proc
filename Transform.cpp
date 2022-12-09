@@ -234,3 +234,56 @@ Eigen::Matrix<int,-1, -1> iFFT2D::transform(const Eigen::Matrix<std::complex<dou
     std::cout<< mspatialDomain;
     return mspatialDomain;
 }
+MatrixXi LowpassFilter::transform(const MatrixXi& item){
+    int nrows = item.rows();
+    int ncols = item.cols();
+    int size = nrows * ncols;
+    int rowc = nrows/2;
+    int colc = ncols/2;
+
+    /*perform 2DFFT*/
+    FFT2D a(stp);
+    Eigen::Matrix<std::complex<double>,-1, -1> copyfrequency;
+    copyfrequency.resize(nrows,ncols);
+    copyfrequency=a.transform(item);
+
+    for (int i = 0; i < nrows; i++){
+        for (int j = 0; j < ncols; j++){
+            if (double(std::sqrt((i-rowc)*(i-rowc)+(j-colc)*(j-colc))) > thr){
+                copyfrequency(i,j)=std::complex(0,0);
+            }
+            else{
+                continue;
+            }
+        }
+    }
+    iFFT2D b;
+    return b.transform(copyfrequency);
+}
+
+MatrixXi HighpassFilter::transform(const MatrixXi& item){
+    int nrows = item.rows();
+    int ncols = item.cols();
+    int size = nrows * ncols;
+    int rowc = nrows/2;
+    int colc = ncols/2;
+
+    /*perform 2DFFT*/
+    FFT2D a(stp);
+    Eigen::Matrix<std::complex<double>,-1, -1> copyfrequency;
+    copyfrequency.resize(nrows,ncols);
+    copyfrequency=a.transform(item);
+
+    for (int i = 0; i < nrows; i++){
+        for (int j = 0; j < ncols; j++){
+            if (double(std::sqrt((i-rowc)*(i-rowc)+(j-colc)*(j-colc))) <= thr){
+                copyfrequency(i,j)=std::complex(0,0);
+            }
+            else{
+                continue;
+            }
+        }
+    }
+    iFFT2D b;
+    return b.transform(copyfrequency);
+}
