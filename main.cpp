@@ -141,30 +141,11 @@ public:
 };
 
 
-int main() { //int argc, char* argv[]) { 
-    /*cv::Mat image(2, 3, CV_8U, 4);
-    cout << image << "\n---\n";
-    MatrixXi test_mat = opencv2eigen(image);
-    cout << test_mat << "\n";*/
-
-    MatrixXi image(2, 3);
-    image << 4, 4, 4, 
-             4, 4, 4;
-    cout << image << "\n---\n";
-    cv::Mat test_mat = eigen2opencv(image);
-    cout << test_mat << "\n";
-
-    double test_min, test_max;
-    cv::minMaxLoc(test_mat, &test_min, &test_max);
-    cout << test_min << " " << test_max << "\n";
-
-    /*const char* HELP_STR = "--help";
+void parse_cl_input(int argc, const char* argv[]) {
+    const char* HELP_STR = "--help";
     const char* HELP_MSG = "asdasd";
+    std::array parsers_list = {ThresholdingParser()}; // pass as an argument?
 
-    vector <const char*> argv = {"path", "threshold", "/data/images/cameraman.tif", "/out.png", "30", "200"};
-    int argc = argv.size();
-
-    std::array parsers_list = {ThresholdingParser()};
     string opt_str(argv[1]);
 
     if (argc == 1) {
@@ -191,7 +172,21 @@ int main() { //int argc, char* argv[]) {
                 }
             }
         }
-    }*/
+    }
+}
+
+
+int main() { //int argc, char* argv[]) { 
+    vector <const char*> argv = {"path", "threshold", "/data/images/cameraman.tif", "/out.png", "30", "200.1"};
+    int argc = argv.size();
+
+    try {
+        parse_cl_input(argc, argv.data());
+    } catch (const std::exception& err) {
+        cout << err.what() << "\n";
+    } catch (...) {
+        cout << "Unprocessed exception\n";
+    }
 
     /*
     cout << "Original\n" << img << "\n";

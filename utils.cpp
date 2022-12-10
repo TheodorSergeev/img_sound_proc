@@ -80,9 +80,6 @@ cv::Mat eigen2opencv(const MatrixXi& mat) {
     int n_rows = mat.rows();
     cv::Mat image = cv::Mat::zeros(n_rows, n_cols, CV_8U);
 
-    cout <<"cols " << n_cols << "\n";
-    cout <<"n_rows " << n_rows << "\n";
-
     for (int i = 0; i < n_cols; ++i) {
         for (int j = 0; j < n_rows; ++j) {
             image.at<char>(j, i) = mat(j, i);
