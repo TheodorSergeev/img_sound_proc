@@ -3,10 +3,10 @@
 
 #include <iostream>
 #include <string>
+#include <filesystem>
 #include "Eigen/Dense"
 #include "AudioFile.h"
 #include <opencv2/opencv.hpp>
-#include <filesystem>
 
 using std::cout;
 using std::string;
