@@ -141,8 +141,24 @@ public:
 };
 
 
-int main() { //int argc, char* argv[]) {
-    const char* HELP_STR = "--help";
+int main() { //int argc, char* argv[]) { 
+    /*cv::Mat image(2, 3, CV_8U, 4);
+    cout << image << "\n---\n";
+    MatrixXi test_mat = opencv2eigen(image);
+    cout << test_mat << "\n";*/
+
+    MatrixXi image(2, 3);
+    image << 4, 4, 4, 
+             4, 4, 4;
+    cout << image << "\n---\n";
+    cv::Mat test_mat = eigen2opencv(image);
+    cout << test_mat << "\n";
+
+    double test_min, test_max;
+    cv::minMaxLoc(test_mat, &test_min, &test_max);
+    cout << test_min << " " << test_max << "\n";
+
+    /*const char* HELP_STR = "--help";
     const char* HELP_MSG = "asdasd";
 
     vector <const char*> argv = {"path", "threshold", "/data/images/cameraman.tif", "/out.png", "30", "200"};
@@ -175,7 +191,7 @@ int main() { //int argc, char* argv[]) {
                 }
             }
         }
-    }
+    }*/
 
     /*
     cout << "Original\n" << img << "\n";

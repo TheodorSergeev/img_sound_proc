@@ -64,11 +64,11 @@ MatrixXd readFloatMatrix(const string& inp_fname) {
 MatrixXi opencv2eigen(const cv::Mat& image) {
     int n_cols = image.cols;
     int n_rows = image.rows;
-    MatrixXi mat(n_cols, n_rows);
+    MatrixXi mat(n_rows, n_cols);
 
     for (int i = 0; i < n_cols; ++i) {
         for (int j = 0; j < n_rows; ++j) {
-            mat(i, j) = (int) image.at<char>(i, j);
+            mat(j, i) = (int) image.at<char>(j, i);
         }
     }
 
@@ -78,11 +78,14 @@ MatrixXi opencv2eigen(const cv::Mat& image) {
 cv::Mat eigen2opencv(const MatrixXi& mat) {
     int n_cols = mat.cols();
     int n_rows = mat.rows();
-    cv::Mat image = cv::Mat::zeros(n_cols, n_rows, CV_8U);
+    cv::Mat image = cv::Mat::zeros(n_rows, n_cols, CV_8U);
+
+    cout <<"cols " << n_cols << "\n";
+    cout <<"n_rows " << n_rows << "\n";
 
     for (int i = 0; i < n_cols; ++i) {
         for (int j = 0; j < n_rows; ++j) {
-            image.at<char>(i, j) = mat(i, j);
+            image.at<char>(j, i) = mat(j, i);
         }
     }
 
