@@ -4,7 +4,7 @@
 void parse_cl_input(int argc, const char* argv[]) {
     const char* HELP_STR = "--help";
     const char* HELP_MSG = "asdasd";
-    std::array parsers_list = {ThresholdingParser()}; // pass as an argument?
+    std::array parsers_list = {ThresholdingParser()}; // todo: pass as an argument?
 
     string opt_str(argv[1]);
 
@@ -36,7 +36,7 @@ void parse_cl_input(int argc, const char* argv[]) {
 }
 
 
-/* Parser */
+// Parser
 
 template <typename TInput, typename TOutput>
 void Parser<TInput, TOutput>::checkArgNum(const vector<string>& arguments) {
@@ -63,7 +63,7 @@ template <typename TInput, typename TOutput>
 Transform<TInput, TOutput>* Parser<TInput, TOutput>::parse(const vector<string>& arguments) = 0;
 
 
-/* ThresholdingParser*/
+// ThresholdingParser
 
 ThresholdingParser::ThresholdingParser() {
     arg_num = 2;
@@ -76,7 +76,7 @@ Transform<MatrixXi, MatrixXi>* ThresholdingParser::parse(const vector<string>& a
     if (arguments.size() != 2 + arg_num)
         throw std::invalid_argument("Thresholding requires exactly two integer arguments.");
                 
-    // throw an exception if not convertible to int
+    // throws an exception if not convertible to int
     int thr_min = std::stoi(arguments[2]);
     int thr_max = std::stoi(arguments[3]);
 
