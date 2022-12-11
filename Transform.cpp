@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <string>
 #include <exception>
@@ -32,9 +33,40 @@ MatrixXi Thresholding::transform(const MatrixXi &item)
                 thr_item(i, j) = item(i, j);
         }
     }
+    mthr_item.resize(nrows,ncols);
+    for (int i = 0; i < nrows; ++i) {
+        for (int j = 0; j < ncols; ++j) {
+            mthr_item(i,j)=thr_item(i,j);
+        }
+    }
+    transformed = 1;
 
     return thr_item;
 }
+
+void Thresholding::save(std::string filename){
+    if (transformed != 1){
+        try {
+            throw std::logic_error("perform transform first");
+        }
+        catch (const std::logic_error &e) {
+            std::cout << e.what() << std::endl;
+        }
+    }
+    std::ofstream write_output(filename + " threshold.dat");
+    assert(write_output.is_open());
+    int nrows = mthr_item.rows();
+    int ncols = mthr_item.cols();
+
+    for (int i = 0; i < nrows; ++i) {
+        for (int j = 0; j < ncols; ++j) {
+            write_output << mthr_item(i,j) <<" ";
+        }
+        write_output << "\n";
+    }
+    write_output.close();
+}
+
 MatrixXd Histogram::transform(const MatrixXi &item) {
     int nrows = item.rows();
     int ncols = item.cols();
@@ -50,10 +82,39 @@ MatrixXd Histogram::transform(const MatrixXi &item) {
             hist(0,item(i, j) - min_val) += 1. / size;
         }
     }
+    mHist.resize(nrows,ncols);
+    for (int i = 0; i < nrows; ++i) {
+        for (int j = 0; j < ncols; ++j) {
+            mHist(i,j)=hist(i,j);
+        }
+    }
+    transformed = 1;
 
     return hist;
 }
 
+void Histogram::save(std::string filename){
+    if (transformed != 1){
+        try {
+            throw std::logic_error("perform transform first");
+        }
+        catch (const std::logic_error &e) {
+            std::cout << e.what() << std::endl;
+        }
+    }
+    std::ofstream write_output(filename + " histogram.dat");
+    assert(write_output.is_open());
+    int nrows = mHist.rows();
+    int ncols = mHist.cols();
+
+    for (int i = 0; i < nrows; ++i) {
+        for (int j = 0; j < ncols; ++j) {
+            write_output << mHist(i,j) <<" ";
+        }
+        write_output << "\n";
+    }
+    write_output.close();
+}
 /* define mainbody of FFT1D */
 void mainFFT1D(std::complex<float> signal[], int start, int fin, int step1, float inv, std::complex<float> buffer[]){
     int n = (fin-start)/step1+1;

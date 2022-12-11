@@ -1,6 +1,7 @@
 #ifndef TRANSFORMHEADERDEF
 #define TRANSFORMHEADERDEF
 #include <iostream>
+#include <fstream>
 #include <cmath>
 #include <vector>
 #include <string>
@@ -28,7 +29,8 @@ public:
 class Thresholding: public Transform<MatrixXi, MatrixXi> {
 private:
     int thr_min, thr_max;
-
+    MatrixXi mthr_item;
+    int transformed = 0;
 public:
     explicit Thresholding(const int thr_min_, const int thr_max_) {
         thr_min = thr_min_;
@@ -36,13 +38,17 @@ public:
     }
 
     MatrixXi transform(const MatrixXi& item) override;
+    void save(std::string filename = "unspecified item");
 };
 
 class Histogram: public Transform<MatrixXi, MatrixXd> {
+private:
+    MatrixXd mHist;
+    int transformed = 0;
 public:
     explicit Histogram() = default;
-
     MatrixXd transform(const MatrixXi& item) override;
+    void save(std::string filename = "unspecified item");
 };
 
 class FFT1D: public Transform<MatrixXi, Eigen::Matrix<std::complex<double>,1, Dynamic>> {
