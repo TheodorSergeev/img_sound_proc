@@ -75,15 +75,19 @@ public:
         return mMagnitude;
 
     }
+    void save_freq(std::string filename = "unspecified item");
+    void save_mag(std::string filename = "unspecified item");
 
 };
 
 class iFFT1D: public Transform<Eigen::Matrix<std::complex<double>,1, -1>, Eigen::Matrix<int,1, -1>> {
 private:
     Eigen::Matrix<int,1, Dynamic> mspatialDomain;
+    int transformed = 0;
 public:
     explicit iFFT1D() = default;
     Eigen::Matrix<int,1, Dynamic> transform(const Eigen::Matrix<std::complex<double>,1, -1>& item) override;
+    void save(std::string filename = "unspecified item");
 
 };
 
@@ -111,15 +115,19 @@ public:
         return mMagnitude;
 
     }
+    void save_freq(std::string filename = "unspecified item");
+    void save_mag(std::string filename = "unspecified item");
 
 };
 
 class iFFT2D: public Transform<Eigen::Matrix<std::complex<double>,-1, -1>, Eigen::Matrix<int,-1, -1>> {
 private:
     Eigen::Matrix<int,-1, -1> mspatialDomain;
+    int transformed = 0;
 public:
     explicit iFFT2D() = default;
     Eigen::Matrix<int,-1, -1> transform(const Eigen::Matrix<std::complex<double>,-1, -1>& item) override;
+    void save(std::string filename = "unspecified item");
 
 };
 
@@ -127,22 +135,28 @@ class LowpassFilter : public Transform<MatrixXi,MatrixXi> {
 private:
     double thr;
     int stp;
+    MatrixXi filtered;
+    int transformed = 0;
 public:
     explicit LowpassFilter(const double threshold, int step = 1) {
         thr = threshold;
-        step = 1;
+        stp=step;
     }
     MatrixXi transform(const MatrixXi& item) override;
+    void save(std::string filename = "unspecified item");
 };
 class HighpassFilter : public Transform<MatrixXi,MatrixXi> {
 private:
     double thr;
     int stp;
+    MatrixXi filtered;
+    int transformed = 0;
 public:
     explicit HighpassFilter(const double threshold, int step = 1) {
         thr = threshold;
         stp = step;
     }
     MatrixXi transform(const MatrixXi& item) override;
+    void save(std::string filename = "unspecified item");
 };
 #endif
