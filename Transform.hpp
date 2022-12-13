@@ -58,8 +58,7 @@ private:
     int step;
     int transformed =0;
 public:
-    explicit FFT1D() = default;
-    explicit FFT1D(const int n){
+    FFT1D( int n = 1){
         step = n;
     }
     Eigen::Matrix<std::complex<double>,1, Dynamic> transform(const MatrixXi& item) override;
@@ -98,8 +97,8 @@ private:
     int step;
     int transformed =0;
 public:
-    explicit FFT2D() = default;
-    explicit FFT2D(const int n){
+
+    FFT2D(int n = 1){
         step = n;
     }
     Eigen::Matrix<std::complex<double>,-1, -1> transform(const MatrixXi& item) override;

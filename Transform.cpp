@@ -411,7 +411,7 @@ Eigen::Matrix<int,-1, -1> iFFT2D::transform(const Eigen::Matrix<std::complex<dou
     }
     delete[] frequency;
     transformed = 1;
-    std::cout<< mspatialDomain;
+
     return mspatialDomain;
 }
 
