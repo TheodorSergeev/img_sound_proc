@@ -18,12 +18,12 @@ set("OpenCV_DIR" "./opencv/build/")
 find_package(OpenCV REQUIRED core imgcodecs)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-add_executable(img_sound_proc main.cpp utils.cpp transforms.cpp Transform.cpp parsing.cpp)
+add_executable(img_sound_proc main.cpp utils.cpp transforms.cpp parsing.cpp)
 target_link_libraries(img_sound_proc ${OpenCV_LIBS})
 
 # todo: separate into a different cmake file?
 #enable_testing()
-#add_executable(my_test test.cpp utils.cpp transforms.cpp parsing.cpp Transform.cpp)
+#add_executable(my_test test.cpp utils.cpp transforms.cpp parsing.cpp)
 #find_package(GTest REQUIRED)
 #target_link_libraries(my_test GTest::gtest_main)
 #target_link_libraries(my_test ${OpenCV_LIBS})
