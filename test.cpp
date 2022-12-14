@@ -1,43 +1,42 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <exception>
-#include "Eigen/Dense"
-#include "Transform.hpp"
-//#include <opencv2/opencv.hpp>
-//#include <opencv2/imgcodecs.hpp>
+#include <gtest/gtest.h>
+#include "utils.hpp"
+//#include "transforms.hpp"
+//#include "parsing.hpp"
 
-//using cv::imread;
+// Demonstrate some basic assertions.
+TEST(HelloTest, BasicAssertions) {
+    // Expect two strings not to be equal.
+    EXPECT_STRNE("hello", "world");
+    // Expect equality.
+    EXPECT_EQ(7 * 6, 42);
+}
 
-void foo() { throw std::runtime_error("my message"); }
-int main() {
-    try {
-        foo();
-    } catch (const std::runtime_error &e) {
-        std::cout << e.what() << std::endl;
-    }
-    Eigen::MatrixXi imag;
-    imag.resize(2,4);
-    imag.resize(4,4);
-    imag << 0,1,2,3,
-            9,8,7,6,
-            4,2,5,6,
-            6,8,3,1;
+TEST(UtilsTest, opencv2eigen) {
+    cv::Mat image(2, 3, CV_8U, 4);
+    MatrixXi test_mat = opencv2eigen(image);
 
-    FFT1D test1(1);
-    std::cout <<test1.transform(imag)<<std::endl;
-    FFT2D test(1);
-    std::cout <<test.transform(imag)<<std::endl;
-    test.getMagnitude();
-    iFFT2D itest;
-    itest.transform(test.transform(imag));
-    std::cout <<std::endl;
-    LowpassFilter testLow(1.2);
-    testLow.transform(imag);
-    std::cout <<std::endl;
-    HighpassFilter testHigh(1.2);
-    testHigh.transform(imag);
+    // Check matrix size
+    EXPECT_EQ(test_mat.cols(), 3);
+    EXPECT_EQ(test_mat.rows(), 2);
 
-    return 0;
+    // Check matrix contents
+    EXPECT_EQ(test_mat.minCoeff(), 4);
+    EXPECT_EQ(test_mat.maxCoeff(), 4);
+}
 
+TEST(UtilsTest, eigen2opencv) {
+    MatrixXi image(2, 3);
+    image << 4, 4, 4, 
+             4, 4, 4;
+    cv::Mat test_mat = eigen2opencv(image);
+
+    // Check matrix size
+    EXPECT_EQ(test_mat.cols, 3);
+    EXPECT_EQ(test_mat.rows, 2);
+
+    // Check matrix contents
+    double test_min, test_max;
+    cv::minMaxLoc(test_mat, &test_min, &test_max);
+    EXPECT_EQ(test_min, 4);
+    EXPECT_EQ(test_max, 4);
 }

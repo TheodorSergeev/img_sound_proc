@@ -1,5 +1,19 @@
 # IDE files
 .idea/*
+.vscode/
 
 # CMake files
 cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+*.cmake
+
+# executable
+img_sound_proc
+
+# test
+Testing/
+my_test
+out.png
