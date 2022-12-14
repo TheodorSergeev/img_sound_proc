@@ -4,11 +4,10 @@
 
 # CMake files
 cmake-build-*/
-CMakeCache.txt
 CMakeFiles/
 Makefile
 cmake_install.cmake
-*.cmake
+CMakeCache.txt
 
 # executable
 img_sound_proc
