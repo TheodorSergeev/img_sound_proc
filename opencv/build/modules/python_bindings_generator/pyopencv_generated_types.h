@@ -156,6 +156,8 @@ CVPY_TYPE(TrackerGOTURN, TrackerGOTURN, Ptr<cv::TrackerGOTURN>, Ptr, Tracker, 0,
 CVPY_TYPE(Params, TrackerGOTURN_Params, cv::TrackerGOTURN::Params, Params, NoBase, pyopencv_cv_TrackerGOTURN_Params_TrackerGOTURN_Params, ".TrackerGOTURN");
 CVPY_TYPE(TrackerDaSiamRPN, TrackerDaSiamRPN, Ptr<cv::TrackerDaSiamRPN>, Ptr, Tracker, 0, "");
 CVPY_TYPE(Params, TrackerDaSiamRPN_Params, cv::TrackerDaSiamRPN::Params, Params, NoBase, pyopencv_cv_TrackerDaSiamRPN_Params_TrackerDaSiamRPN_Params, ".TrackerDaSiamRPN");
+CVPY_TYPE(TrackerNano, TrackerNano, Ptr<cv::TrackerNano>, Ptr, Tracker, 0, "");
+CVPY_TYPE(Params, TrackerNano_Params, cv::TrackerNano::Params, Params, NoBase, pyopencv_cv_TrackerNano_Params_TrackerNano_Params, ".TrackerNano");
 CVPY_TYPE(GArrayDesc, GArrayDesc, cv::GArrayDesc, GArrayDesc, NoBase, 0, "");
 CVPY_TYPE(GComputation, GComputation, Ptr<cv::GComputation>, Ptr, NoBase, pyopencv_cv_GComputation_GComputation, "");
 CVPY_TYPE(GFrame, GFrame, cv::GFrame, GFrame, NoBase, pyopencv_cv_GFrame_GFrame, "");

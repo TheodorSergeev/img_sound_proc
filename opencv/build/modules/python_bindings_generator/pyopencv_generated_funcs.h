@@ -2932,6 +2932,25 @@ static PyObject* pyopencv_cv_TrackerMIL_create(PyObject* , PyObject* py_args, Py
     return NULL;
 }
 
+static PyObject* pyopencv_cv_TrackerNano_create(PyObject* , PyObject* py_args, PyObject* kw)
+{
+    using namespace cv;
+
+    PyObject* pyobj_parameters = NULL;
+    TrackerNano_Params parameters=TrackerNano::Params();
+    Ptr<TrackerNano> retval;
+
+    const char* keywords[] = { "parameters", NULL };
+    if( PyArg_ParseTupleAndKeywords(py_args, kw, "|O:TrackerNano_create", (char**)keywords, &pyobj_parameters) &&
+        pyopencv_to_safe(pyobj_parameters, parameters, ArgInfo("parameters", 0)) )
+    {
+        ERRWRAP2(retval = cv::TrackerNano::create(parameters));
+        return pyopencv_from(retval);
+    }
+
+    return NULL;
+}
+
 static PyObject* pyopencv_cv_UMat_context(PyObject* , PyObject* py_args, PyObject* kw)
 {
     using namespace cv;

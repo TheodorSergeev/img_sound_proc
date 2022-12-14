@@ -23611,6 +23611,225 @@ struct PyOpenCV_Converter< cv::TrackerMIL::Params >
 };
 
 //================================================================================
+// TrackerNano (Generic)
+//================================================================================
+
+// GetSet (TrackerNano)
+
+
+
+// Methods (TrackerNano)
+
+static PyObject* pyopencv_cv_TrackerNano_create_static(PyObject* self, PyObject* py_args, PyObject* kw)
+{
+    using namespace cv;
+
+    PyObject* pyobj_parameters = NULL;
+    TrackerNano_Params parameters=TrackerNano::Params();
+    Ptr<TrackerNano> retval;
+
+    const char* keywords[] = { "parameters", NULL };
+    if( PyArg_ParseTupleAndKeywords(py_args, kw, "|O:TrackerNano.create", (char**)keywords, &pyobj_parameters) &&
+        pyopencv_to_safe(pyobj_parameters, parameters, ArgInfo("parameters", 0)) )
+    {
+        ERRWRAP2(retval = cv::TrackerNano::create(parameters));
+        return pyopencv_from(retval);
+    }
+
+    return NULL;
+}
+
+static PyObject* pyopencv_cv_TrackerNano_getTrackingScore(PyObject* self, PyObject* py_args, PyObject* kw)
+{
+    using namespace cv;
+
+
+    Ptr<cv::TrackerNano> * self1 = 0;
+    if (!pyopencv_TrackerNano_getp(self, self1))
+        return failmsgp("Incorrect type of self (must be 'TrackerNano' or its derivative)");
+    Ptr<cv::TrackerNano> _self_ = *(self1);
+    float retval;
+
+    if(PyObject_Size(py_args) == 0 && (!kw || PyObject_Size(kw) == 0))
+    {
+        ERRWRAP2(retval = _self_->getTrackingScore());
+        return pyopencv_from(retval);
+    }
+
+    return NULL;
+}
+
+
+
+// Tables (TrackerNano)
+
+static PyGetSetDef pyopencv_TrackerNano_getseters[] =
+{
+    {NULL}  /* Sentinel */
+};
+
+static PyMethodDef pyopencv_TrackerNano_methods[] =
+{
+    {"create", CV_PY_FN_WITH_KW_(pyopencv_cv_TrackerNano_create_static, METH_STATIC), "create([, parameters]) -> retval\n.   @brief Constructor\n.       @param parameters NanoTrack parameters TrackerNano::Params"},
+    {"getTrackingScore", CV_PY_FN_WITH_KW_(pyopencv_cv_TrackerNano_getTrackingScore, 0), "getTrackingScore() -> retval\n.   @brief Return tracking score"},
+
+    {NULL,          NULL}
+};
+
+// Converter (TrackerNano)
+
+template<>
+struct PyOpenCV_Converter< Ptr<cv::TrackerNano> >
+{
+    static PyObject* from(const Ptr<cv::TrackerNano>& r)
+    {
+        return pyopencv_TrackerNano_Instance(r);
+    }
+    static bool to(PyObject* src, Ptr<cv::TrackerNano>& dst, const ArgInfo& info)
+    {
+        if(!src || src == Py_None)
+            return true;
+        Ptr<cv::TrackerNano> * dst_;
+        if (pyopencv_TrackerNano_getp(src, dst_))
+        {
+            dst = *dst_;
+            return true;
+        }
+        
+        failmsg("Expected Ptr<cv::TrackerNano> for argument '%s'", info.name);
+        return false;
+    }
+};
+
+//================================================================================
+// TrackerNano_Params (Generic)
+//================================================================================
+
+// GetSet (TrackerNano_Params)
+
+
+static PyObject* pyopencv_TrackerNano_Params_get_backbone(pyopencv_TrackerNano_Params_t* p, void *closure)
+{
+    return pyopencv_from(p->v.backbone);
+}
+
+static int pyopencv_TrackerNano_Params_set_backbone(pyopencv_TrackerNano_Params_t* p, PyObject *value, void *closure)
+{
+    if (!value)
+    {
+        PyErr_SetString(PyExc_TypeError, "Cannot delete the backbone attribute");
+        return -1;
+    }
+    return pyopencv_to_safe(value, p->v.backbone, ArgInfo("value", false)) ? 0 : -1;
+}
+
+static PyObject* pyopencv_TrackerNano_Params_get_backend(pyopencv_TrackerNano_Params_t* p, void *closure)
+{
+    return pyopencv_from(p->v.backend);
+}
+
+static int pyopencv_TrackerNano_Params_set_backend(pyopencv_TrackerNano_Params_t* p, PyObject *value, void *closure)
+{
+    if (!value)
+    {
+        PyErr_SetString(PyExc_TypeError, "Cannot delete the backend attribute");
+        return -1;
+    }
+    return pyopencv_to_safe(value, p->v.backend, ArgInfo("value", false)) ? 0 : -1;
+}
+
+static PyObject* pyopencv_TrackerNano_Params_get_neckhead(pyopencv_TrackerNano_Params_t* p, void *closure)
+{
+    return pyopencv_from(p->v.neckhead);
+}
+
+static int pyopencv_TrackerNano_Params_set_neckhead(pyopencv_TrackerNano_Params_t* p, PyObject *value, void *closure)
+{
+    if (!value)
+    {
+        PyErr_SetString(PyExc_TypeError, "Cannot delete the neckhead attribute");
+        return -1;
+    }
+    return pyopencv_to_safe(value, p->v.neckhead, ArgInfo("value", false)) ? 0 : -1;
+}
+
+static PyObject* pyopencv_TrackerNano_Params_get_target(pyopencv_TrackerNano_Params_t* p, void *closure)
+{
+    return pyopencv_from(p->v.target);
+}
+
+static int pyopencv_TrackerNano_Params_set_target(pyopencv_TrackerNano_Params_t* p, PyObject *value, void *closure)
+{
+    if (!value)
+    {
+        PyErr_SetString(PyExc_TypeError, "Cannot delete the target attribute");
+        return -1;
+    }
+    return pyopencv_to_safe(value, p->v.target, ArgInfo("value", false)) ? 0 : -1;
+}
+
+
+// Methods (TrackerNano_Params)
+
+static int pyopencv_cv_TrackerNano_Params_TrackerNano_Params(pyopencv_TrackerNano_Params_t* self, PyObject* py_args, PyObject* kw)
+{
+    using namespace cv;
+
+
+    if(PyObject_Size(py_args) == 0 && (!kw || PyObject_Size(kw) == 0))
+    {
+        if(self) ERRWRAP2(new (&(self->v)) cv::TrackerNano::Params());
+        return 0;
+    }
+
+    return -1;
+}
+
+
+
+// Tables (TrackerNano_Params)
+
+static PyGetSetDef pyopencv_TrackerNano_Params_getseters[] =
+{
+    {(char*)"backbone", (getter)pyopencv_TrackerNano_Params_get_backbone, (setter)pyopencv_TrackerNano_Params_set_backbone, (char*)"backbone", NULL},
+    {(char*)"backend", (getter)pyopencv_TrackerNano_Params_get_backend, (setter)pyopencv_TrackerNano_Params_set_backend, (char*)"backend", NULL},
+    {(char*)"neckhead", (getter)pyopencv_TrackerNano_Params_get_neckhead, (setter)pyopencv_TrackerNano_Params_set_neckhead, (char*)"neckhead", NULL},
+    {(char*)"target", (getter)pyopencv_TrackerNano_Params_get_target, (setter)pyopencv_TrackerNano_Params_set_target, (char*)"target", NULL},
+    {NULL}  /* Sentinel */
+};
+
+static PyMethodDef pyopencv_TrackerNano_Params_methods[] =
+{
+
+    {NULL,          NULL}
+};
+
+// Converter (TrackerNano_Params)
+
+template<>
+struct PyOpenCV_Converter< cv::TrackerNano::Params >
+{
+    static PyObject* from(const cv::TrackerNano::Params& r)
+    {
+        return pyopencv_TrackerNano_Params_Instance(r);
+    }
+    static bool to(PyObject* src, cv::TrackerNano::Params& dst, const ArgInfo& info)
+    {
+        if(!src || src == Py_None)
+            return true;
+        cv::TrackerNano::Params * dst_;
+        if (pyopencv_TrackerNano_Params_getp(src, dst_))
+        {
+            dst = *dst_;
+            return true;
+        }
+        
+        failmsg("Expected cv::TrackerNano::Params for argument '%s'", info.name);
+        return false;
+    }
+};
+
+//================================================================================
 // UMat (Generic)
 //================================================================================
 

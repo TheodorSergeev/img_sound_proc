@@ -82,4 +82,4 @@
 #include "opencv2/gapi/streaming/onevpl/accel_types.hpp"
 #include "opencv2/gapi/streaming/sync.hpp"
 #include "opencv2/gapi/video.hpp"
-#include "/home/fedor/Desktop/opencv/opencv-4.x/modules/gapi/misc/python/python_bridge.hpp"
+#include "/home/fedor/Desktop/img_sound_proc/opencv/opencv-4.x/modules/gapi/misc/python/python_bridge.hpp"

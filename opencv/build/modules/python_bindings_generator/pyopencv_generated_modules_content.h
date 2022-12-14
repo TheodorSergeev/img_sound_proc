@@ -54,6 +54,7 @@ static PyMethodDef methods_cv[] = {
     {"TrackerDaSiamRPN_create", CV_PY_FN_WITH_KW_(pyopencv_cv_TrackerDaSiamRPN_create, 0), "TrackerDaSiamRPN_create([, parameters]) -> retval\n.   @brief Constructor\n.       @param parameters DaSiamRPN parameters TrackerDaSiamRPN::Params"},
     {"TrackerGOTURN_create", CV_PY_FN_WITH_KW_(pyopencv_cv_TrackerGOTURN_create, 0), "TrackerGOTURN_create([, parameters]) -> retval\n.   @brief Constructor\n.       @param parameters GOTURN parameters TrackerGOTURN::Params"},
     {"TrackerMIL_create", CV_PY_FN_WITH_KW_(pyopencv_cv_TrackerMIL_create, 0), "TrackerMIL_create([, parameters]) -> retval\n.   @brief Create MIL tracker instance\n.        *  @param parameters MIL parameters TrackerMIL::Params"},
+    {"TrackerNano_create", CV_PY_FN_WITH_KW_(pyopencv_cv_TrackerNano_create, 0), "TrackerNano_create([, parameters]) -> retval\n.   @brief Constructor\n.       @param parameters NanoTrack parameters TrackerNano::Params"},
     {"UMat_context", CV_PY_FN_WITH_KW_(pyopencv_cv_UMat_context, 0), "UMat_context() -> retval\n."},
     {"UMat_queue", CV_PY_FN_WITH_KW_(pyopencv_cv_UMat_queue, 0), "UMat_queue() -> retval\n."},
     {"VariationalRefinement_create", CV_PY_FN_WITH_KW_(pyopencv_cv_VariationalRefinement_create, 0), "VariationalRefinement_create() -> retval\n.   @brief Creates an instance of VariationalRefinement"},
