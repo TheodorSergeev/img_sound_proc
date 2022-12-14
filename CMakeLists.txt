@@ -10,10 +10,10 @@ set(CMAKE_CXX_STANDARD 17)
 #)
 
 # modify if using different versions or paths
-include_directories(../eigen-3.4.0)
-include_directories(../AudioFile)
-include_directories(../opencv/build/include/opencv2)
-set("OpenCV_DIR" "../opencv/build/")
+include_directories(./eigen-3.4.0)
+include_directories(./AudioFile)
+include_directories(./opencv/build/include/opencv2)
+set("OpenCV_DIR" "./opencv/build/")
 
 find_package(OpenCV REQUIRED core imgcodecs)
 include_directories(${OpenCV_INCLUDE_DIRS})
