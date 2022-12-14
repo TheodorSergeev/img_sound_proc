@@ -3,10 +3,12 @@
 #include <string>
 #include <exception>
 #include "Eigen/Dense"
+#include "Transform.hpp"
 #include <filesystem>
 #include "utils.hpp"
 #include "transforms.hpp"
 #include "parsing.hpp"
+
 
 using std::cout;
 using std::string;
@@ -14,7 +16,6 @@ using std::vector;
 using std::to_string;
 using Eigen::MatrixXi;
 using Eigen::MatrixXd;
-
 
 
 int main() { //int argc, char* argv[]) { 
@@ -30,10 +31,12 @@ int main() { //int argc, char* argv[]) {
     }
 
     /*
+>>>>>>> master
     cout << "Original\n" << img << "\n";
 
-    Thresholding threshold(3,6);
+    Thresholding threshold(1,3);
     cout << "Thresholding\n" << threshold.transform(img) << "\n";
+
 
     Histogram hist;
     cout << "Histogram\n" << hist.transform(img);*/
