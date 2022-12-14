@@ -14,5 +14,6 @@ img_sound_proc
 
 # test
 Testing/
-my_test
+my_test*
+CTestTestfile.cmake
 out.png
