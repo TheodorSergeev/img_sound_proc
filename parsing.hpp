@@ -54,14 +54,14 @@ public:
      * 
      * @return string The name of the transform.
      */
-    string get_name() const;
+    string get_name();
 
     /**
      * @brief Get the number of argument the transform needs.
      * 
      * @return int The number of arguments.
      */
-    int get_arg_num() const;
+    int get_arg_num();
 
     /**
      * @brief Instantiate a corresponding transform with the specified parameters.
@@ -71,7 +71,7 @@ public:
      */
     virtual Transform<TInput, TOutput>* parse(const vector<string>& arguments) = 0;
 
-    virtual void apply
+    virtual void apply(const vector <string>& arguments) = 0;
 };
 
 /**

@@ -3,8 +3,9 @@
 
 // Transform
 
-template <typename TInput, typename TOutput>
-TOutput Transform<TInput, TOutput>::transform(const TInput& item_) = 0;
+// doesn't work for some reason
+//template <typename TInput, typename TOutput>
+//TOutput Transform<TInput, TOutput>::transform(const TInput& item_) = 0;
 
 
 // Thresholding
