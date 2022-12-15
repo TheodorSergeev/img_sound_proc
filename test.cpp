@@ -2,21 +2,19 @@
 #include "utils.hpp"
 #include "transforms.hpp"
 #include "parsing.hpp"
-//#include "CustomException.h"
 
+using Eigen::MatrixXi;
+using Eigen::MatrixXd;
 
-// Demonstrate some basic assertions.
-TEST(HelloTest, BasicAssertions) {
-    // Expect two strings not to be equal.
-    EXPECT_STRNE("hello", "world");
-    // Expect equality.
-    EXPECT_EQ(7 * 6, 42);
-}
 
 // ==================================================================================
 // test utils
 // ==================================================================================
 
+/**
+ * @brief Check correctness of opencv2eigen (size and contents).
+ * 
+ */
 TEST(UtilsTest, opencv2eigen) {
     cv::Mat image(2, 3, CV_8U, 4);
     MatrixXi test_mat = opencv2eigen(image);
@@ -30,6 +28,10 @@ TEST(UtilsTest, opencv2eigen) {
     EXPECT_EQ(test_mat.maxCoeff(), 4);
 }
 
+/**
+ * @brief Check correctness of eigen2opencv (size and contents).
+ * 
+ */
 TEST(UtilsTest, eigen2opencv) {
     MatrixXi image(2, 3);
     image << 4, 4, 4, 
@@ -52,6 +54,10 @@ TEST(UtilsTest, eigen2opencv) {
 // test transforms
 // ==================================================================================
 
+/**
+ * @brief Setup two test matrices to check correctness of transforms.
+ * 
+ */
 class TransformTest: public::testing::Test{
 protected:
     MatrixXi item_1;
@@ -66,6 +72,10 @@ protected:
     }
 };
 
+/**
+ * @brief Check correctness of the thresholding transform
+ * 
+ */
 TEST_F(TransformTest, THRESHOLDING){
     Thresholding thre_1(5,3);
     Thresholding thre_2(12,21);
@@ -74,12 +84,16 @@ TEST_F(TransformTest, THRESHOLDING){
 
     MatrixXi result(2,2);
     result = thre_2.transform(item_1);
-    EXPECT_EQ(result(0,0),12);
-    EXPECT_EQ(result(0,1),12);
-    EXPECT_EQ(result(1,0),21);
-    EXPECT_EQ(result(1,1),21);
+    EXPECT_EQ(result(0, 0), 12);
+    EXPECT_EQ(result(0, 1), 12);
+    EXPECT_EQ(result(1, 0), 21);
+    EXPECT_EQ(result(1, 1), 21);
 }
 
+/**
+ * @brief Check correctness of the histogram transform
+ * 
+ */
 TEST_F(TransformTest, HISTOGRAM){
     Histogram his;
     his.transform(item_2);
@@ -95,86 +109,120 @@ TEST_F(TransformTest, HISTOGRAM){
     */
 }
 
+/**
+ * @brief Check correctness of 1d Fourier transform
+ * 
+ */
 TEST_F(TransformTest, FFT1DTEST){
     FFT1D fft;
-/// Check exception thrown
+    /// Check exception thrown
     EXPECT_THROW(fft.getMagnitude(), std::logic_error);
 
     fft.transform(item_1);
-    EXPECT_EQ(fft.mfrequencyDomain(0),std::complex<double>(33,0));
-    EXPECT_EQ(fft.mfrequencyDomain(1),std::complex<double>(-5,5));
-    EXPECT_EQ(fft.mfrequencyDomain(2),std::complex<double>(-1,0));
-    EXPECT_EQ(fft.mfrequencyDomain(0),std::complex<double>(-5,-5));
+    auto mat = fft.getMagnitude();
+    EXPECT_EQ(mat(0), std::complex<double>(33, 0));
+    EXPECT_EQ(mat(1), std::complex<double>(-5, 5));
+    EXPECT_EQ(mat(2), std::complex<double>(-1, 0));
+    EXPECT_EQ(mat(0), std::complex<double>(-5, -5));
 }
 
+/**
+ * @brief Check correctness of 1d inverse Fourier transform
+ * 
+ */
 TEST_F(TransformTest, FFT1DANDINVERSE){
     FFT1D fft;
     iFFT1D ifft;
     MatrixXi refer;
     refer.resize(1,4);
     refer << 11, 12, 21, 22;
-    for (int i = 0; i <4; i++){
-        EXPECT_EQ(ifft.transform(fft.transform(item_1))(i),refer(i));
+    auto res = ifft.transform(fft.transform(item_1));
+
+    for (int i = 0; i < 4; i++){
+        EXPECT_EQ(res(i), refer(i));
     }
 }
 
+/**
+ * @brief Check correctness of 2d Fourier transform
+ * 
+ */
 TEST_F(TransformTest, FFT2DTEST){
     FFT2D fft;
     /// Check exception thrown
-    EXPECT_THROW(fft.getMagnitude(),logic_error);
+    EXPECT_THROW(fft.getMagnitude(), std::logic_error);
 
+    auto mat = fft.transform(item_1);
 
-    EXPECT_EQ(fft.transform(item_1)(0,0),std::complex<double>(33,0));
-    EXPECT_EQ(fft.transform(item_1)(0,1),std::complex<double>(-1,0));
-    EXPECT_EQ(fft.transform(item_1)(1,0),std::complex<double>(-10,0));
-    EXPECT_EQ(fft.transform(item_1)(1,1),std::complex<double>(0,0));
+    EXPECT_EQ(mat(0,0), std::complex<double>(33, 0));
+    EXPECT_EQ(mat(0,1), std::complex<double>(-1, 0));
+    EXPECT_EQ(mat(1,0), std::complex<double>(-10, 0));
+    EXPECT_EQ(mat(1,1), std::complex<double>(0, 0));
 }
 
+/**
+ * @brief Check correctness of 2d inverse Fourier transform
+ * 
+ */
 TEST_F(TransformTest, FFT2DANDINVERSE){
     FFT2D fft;
     iFFT2D ifft;
     MatrixXi refer;
-    refer.resize(2,2);
+    refer.resize(2, 2);
     refer = item_1;
-    for (int i = 0; i <2; i++){
-        for (int j = 0; j <2; j++){
-            EXPECT_EQ(ifft.transform(fft.transform(item_1))(i,j),refer(i,j));
+    auto res = ifft.transform(fft.transform(item_1));
+
+    for (int i = 0; i < 2; i++){
+        for (int j = 0; j < 2; j++){
+            EXPECT_EQ(res(i, j), refer(i, j));
         }
     }
 }
 
+/**
+ * @brief Check correctness of the lowpass filter
+ * 
+ */
 TEST_F(TransformTest, LOWPASSFILTER){
     LowpassFilter testLow_1(1);
     LowpassFilter testLow_2(5);
 
-    ///test filtered
-    EXPECT_EQ(testLow_1(item_1)(0,0),-6);
-    EXPECT_EQ(testLow_1(item_1)(0,1),-5);
-    EXPECT_EQ(testLow_1(item_1)(1,0),5);
-    EXPECT_EQ(testLow_1(item_1)(1,1),6);
+    /// test filtered
+    auto mat1 = testLow_1.transform(item_1);
+    EXPECT_EQ(mat1(0, 0), -6);
+    EXPECT_EQ(mat1(0, 1), -5);
+    EXPECT_EQ(mat1(1, 0), 5);
+    EXPECT_EQ(mat1(1, 1), 6);
 
-    ///test nonfiltered
-    EXPECT_EQ(testLow_2(item_1)(0,0),11);
-    EXPECT_EQ(testLow_2(item_1)(0,1),12);
-    EXPECT_EQ(testLow_2(item_1)(1,0),21);
-    EXPECT_EQ(testLow_2(item_1)(1,1),22);
+    /// test nonfiltered
+    auto mat2 = testLow_1.transform(item_1);
+    EXPECT_EQ(mat2(0, 0), 11);
+    EXPECT_EQ(mat2(0, 1), 12);
+    EXPECT_EQ(mat2(1, 0), 21);
+    EXPECT_EQ(mat2(1, 1), 22);
 }
 
+/**
+ * @brief Check correctness of the high pass filter
+ * 
+ */
 TEST_F(TransformTest, HIGHPASSFILTER){
     HighpassFilter testHigh_1(1);
     HighpassFilter testHigh_2(5);
 
-    ///test nonfiltered
-    EXPECT_EQ(testHigh_1(item_1)(0,0),11);
-    EXPECT_EQ(testHigh_1(item_1)(0,1),12);
-    EXPECT_EQ(testHigh_1(item_1)(1,0),21);
-    EXPECT_EQ(testHigh_1(item_1)(1,1),22);
+    /// test nonfiltered
+    auto mat1 = testHigh_1.transform(item_1);
+    EXPECT_EQ(mat1(0, 0), 11);
+    EXPECT_EQ(mat1(0, 1), 12);
+    EXPECT_EQ(mat1(1, 0), 21);
+    EXPECT_EQ(mat1(1, 1), 22);
 
-    ///test filtered
-    EXPECT_EQ(testHigh_2(item_1)(0,0),17);
-    EXPECT_EQ(testHigh_2(item_1)(0,1),17);
-    EXPECT_EQ(testHigh_2(item_1)(1,0),17);
-    EXPECT_EQ(testHigh_2(item_1)(1,1),17);
+    /// test filtered
+    auto mat2 = testHigh_2.transform(item_1);
+    EXPECT_EQ(mat2(0, 0), 17);
+    EXPECT_EQ(mat2(0, 1), 17);
+    EXPECT_EQ(mat2(1, 0), 17);
+    EXPECT_EQ(mat2(1, 1), 17);
 }
 
 
