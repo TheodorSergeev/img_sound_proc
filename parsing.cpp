@@ -98,6 +98,9 @@ void ThresholdingParser::apply(const vector <string>& arguments) {
     writeIntMatrix(out_fname, output);
 }
 
+
+// HistogramParser
+
 HistogramParser::HistogramParser() {
     arg_num = 0;
     name = "histogram";
@@ -120,6 +123,9 @@ void HistogramParser::apply(const vector<string> &arguments) {
     MatrixXd output = thresh ->transform(input);
     writeDoubleMatrix(out_fname, output);
 }
+
+
+// FFT2DFreqParser
 
 FFT2DFreqParser::FFT2DFreqParser() {
     arg_num = 1;
@@ -195,6 +201,9 @@ void FFT2DMagParser::apply(const vector<string> &arguments) {
     writeComplexMatrix(out_fname, output);
 }
 
+
+// iFFT2DParser
+
 iFFT2DParser::iFFT2DParser() {
     arg_num = 0;
     name = "ifft2D";
@@ -219,6 +228,13 @@ Transform<Eigen::Matrix<std::complex<double>,-1, -1>, MatrixXi>* iFFT2DParser::p
     MatrixXd output = thresh ->transform(input);
     writeIntMatrix(out_fname, output);
 }*/
+
+void iFFT2DParser::apply(const vector<string> &arguments) {
+    throw std::logic_error("iFFT2DParser not implemented");
+}
+
+
+// HighpassFilterParser
 
 HighpassFilterParser::HighpassFilterParser(){
     arg_num = 1;
@@ -248,6 +264,9 @@ void HighpassFilterParser::apply(const vector <string>& arguments) {
     MatrixXi output = thresh->transform(input);
     writeIntMatrix(out_fname, output);
 }
+
+
+// LowpassFilterParser
 
 LowpassFilterParser::LowpassFilterParser(){
     arg_num = 1;

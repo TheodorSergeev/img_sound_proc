@@ -77,11 +77,10 @@ protected:
  * 
  */
 TEST_F(TransformTest, THRESHOLDING){
-    Thresholding thre_1(5,3);
-    Thresholding thre_2(12,21);
     /// Check exception thrown
-    EXPECT_THROW(thre_1.transform(item_1), std::invalid_argument);
-
+    EXPECT_THROW(Thresholding(5, 3), std::invalid_argument);
+    Thresholding thre_2(12, 21);
+    
     MatrixXi result(2,2);
     result = thre_2.transform(item_1);
     EXPECT_EQ(result(0, 0), 12);

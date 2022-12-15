@@ -71,8 +71,14 @@ public:
      */
     virtual Transform<TInput, TOutput>* parse(const vector<string>& arguments) = 0;
 
+    /**
+     * @brief Apply the transform (e.g., parse argument, load image, do the transform, save the results).
+     * 
+     * @param arguments List of arguments (parameters of the transform) passed through the command line.
+     */
     virtual void apply(const vector <string>& arguments) = 0;
 };
+
 
 /**
  * @brief Parser for the Thresholding transformation.
@@ -102,6 +108,7 @@ public:
     void apply(const vector <string>& arguments) override;
 };
 
+
 /**
  * @brief Parser for the histogram calculation.
  * @see transforms::Histogram
@@ -129,6 +136,7 @@ public:
     */
     void apply(const vector <string>& arguments) override;
 };
+
 
 /**
  * @brief Parser for the FFT2D transform for frequency domain.
@@ -158,6 +166,7 @@ public:
     */
     void apply(const vector <string>& arguments) override;
 };
+
 
 /**
  * @brief Parser for the FFT2D transform for magnitude.
@@ -218,6 +227,7 @@ public:
     void apply(const vector <string>& arguments) override;
 };
 
+
 /**
  * @brief Parser for the highpass filter transform.
  * @see transforms::HighpassFilter
@@ -246,6 +256,7 @@ public:
     */
     void apply(const vector <string>& arguments) override;
 };
+
 
 /**
  * @brief Parser for the lowpass filter transform.
