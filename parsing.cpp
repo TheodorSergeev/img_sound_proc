@@ -5,6 +5,7 @@ void parse_cl_input(int argc, const char* argv[]) {
     const char* HELP_STR = "--help";
     const char* HELP_MSG = "asdasd";
     std::array parsers_list = {ThresholdingParser()}; // todo: pass as an argument?
+    // todo: add parser list
 
     string opt_str(argv[1]);
 
@@ -18,7 +19,7 @@ void parse_cl_input(int argc, const char* argv[]) {
         if (opt_str == HELP_STR) {
             cout << HELP_MSG << "\n";
         } else {
-            for (auto & parser : parsers_list) {
+            for (auto  &parser : parsers_list) {
                 if (opt_str == parser.get_name()) {
                     cout << "found " << parser.get_name() << "\n";
 

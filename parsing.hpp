@@ -102,44 +102,177 @@ public:
     void apply(const vector <string>& arguments) override;
 };
 
+/**
+ * @brief Parser for the histogram calculation.
+ * @see transforms::Histogram
+ */
 class HistogramParser: public Parser<MatrixXi, MatrixXd> {
 public:
+    /**
+     * @brief Construct a new Histogram Parser object
+     *
+     */
     HistogramParser();
+
+    /**
+     * @brief Instantiate a histogram calculation.
+     *
+     * @param arguments List of arguments (parameters of the transform) passed through the command line.
+     * @return Transform<MatrixXi, MatrixXd>* Instance of the Histogram transform.
+     */
     Transform<MatrixXi, MatrixXd>* parse(const vector<string>& arguments) override;
+
+    /**
+    * @brief Apply the Histogram transform (read the input file, create and use the transform, save the output file).
+    *
+    * @param arguments List of arguments (parameters of the transform) passed through the command line.
+    */
     void apply(const vector <string>& arguments) override;
 };
 
+/**
+ * @brief Parser for the FFT2D transform for frequency domain.
+ * @see transforms::FFT2D
+ */
 class FFT2DFreqParser: public Parser<MatrixXi, Eigen::Matrix<std::complex<double>,-1, -1>>{
 public:
+    /**
+     * @brief Construct a new FFT2D Parser object for frequency
+     *
+     */
     FFT2DFreqParser();
+
+    /**
+     * @brief Instantiate a FFT2D transform.
+     *
+     * @param arguments List of arguments (parameters of the transform) passed through the command line.
+     * @return Transform<MatrixXi, Eigen::Matrix<std::complex<double>,-1, -1>>* Instance of the FFT2D transform for frequency domain.
+     */
     Transform<MatrixXi, Eigen::Matrix<std::complex<double>,-1, -1>>* parse(const vector<string>& arguments) override;
+
+    /**
+    * @brief Apply the FFT2D transform for frequency domain(read the input file, create and use the transform to calculate frequency domain,
+    * save the frequency domain to output file).
+    *
+    * @param arguments List of arguments (parameters of the transform) passed through the command line.
+    */
     void apply(const vector <string>& arguments) override;
 };
 
+/**
+ * @brief Parser for the FFT2D transform for magnitude.
+ * @see transforms::FFT2D
+ */
 class FFT2DMagParser: public Parser<MatrixXi, Eigen::Matrix<std::complex<double>,-1, -1>>{
 public:
+    /**
+    * @brief Construct a new FFT2D Parser object for magnitude
+    *
+    */
     FFT2DMagParser();
+
+    /**
+     * @brief Instantiate a FFT2D transform.
+     *
+     * @param arguments List of arguments (parameters of the transform) passed through the command line.
+     * @return FFT2D* Instance of the FFT2D transform for magnitude.
+     */
     FFT2D* parse(const vector<string>& arguments) override;
+
+    /**
+    * @brief Apply the FFT2D transform for magnitude (read the input file, create and use the transform to calculate magnitude,
+    * save the magnitude to output file).
+    *
+    * @param arguments List of arguments (parameters of the transform) passed through the command line.
+    */
     void apply(const vector <string>& arguments) override;
 };
 
+
+/**
+ * @brief Parser for the iFFT2D transform.
+ * @see transforms::iFFT2D
+ */
 class iFFT2DParser: public Parser<Eigen::Matrix<std::complex<double>,-1, -1>, MatrixXi>{
+public:
+    /**
+    * @brief Construct a new iFFT2D Parser object
+    *
+    */
     iFFT2DParser();
+
+    /**
+     * @brief Instantiate an iFFT2D transform.
+     *
+     * @param arguments List of arguments (parameters of the transform) passed through the command line.
+     * @return Transform<MatrixXi, Eigen::Matrix<std::complex<double>,-1, -1>>* Instance of the FFT2D transform for frequency domain.
+     */
     Transform<Eigen::Matrix<std::complex<double>,-1, -1>, MatrixXi>* parse(const vector<string>& arguments) override;
+
+    /**
+    * @brief Apply the iFFT2D transform (read the input file, create and use the transform to calculate magnitude,
+    * save the output file).
+    *
+    * @param arguments List of arguments (parameters of the transform) passed through the command line.
+    */
     void apply(const vector <string>& arguments) override;
 };
 
+/**
+ * @brief Parser for the highpass filter transform.
+ * @see transforms::HighpassFilter
+ */
 class HighpassFilterParser: public Parser<MatrixXi, MatrixXi> {
 public:
+    /**
+    * @brief Construct a new HighpassFilter Parser object
+    *
+    */
     HighpassFilterParser();
+
+    /**
+     * @brief Instantiate a highpass filter transform.
+     *
+     * @param arguments List of arguments (parameters of the transform) passed through the command line.
+     * @return Transform<MatrixXi, MatrixXi>* Instance of the highpass filter transform.
+     */
     Transform<MatrixXi, MatrixXi>* parse(const vector<string>& arguments) override;
+
+    /**
+    * @brief Apply the highpass filter transform (read the input file, create and use the transform,
+    * save the output file).
+    *
+    * @param arguments List of arguments (parameters of the transform) passed through the command line.
+    */
     void apply(const vector <string>& arguments) override;
 };
 
+/**
+ * @brief Parser for the lowpass filter transform.
+ * @see transforms::LowpassFilter
+ */
 class LowpassFilterParser: public Parser<MatrixXi, MatrixXi> {
 public:
+    /**
+    * @brief Construct a new LowpassFilter Parser object
+    *
+    */
     LowpassFilterParser();
+
+    /**
+     * @brief Instantiate a lowpass filter transform.
+     *
+     * @param arguments List of arguments (parameters of the transform) passed through the command line.
+     * @return Transform<MatrixXi, MatrixXi>* Instance of the lowpass filter transform.
+     */
     Transform<MatrixXi, MatrixXi>* parse(const vector<string>& arguments) override;
+
+    /**
+    * @brief Apply the lowpass filter transform (read the input file, create and use the transform,
+    * save the output file).
+    *
+    * @param arguments List of arguments (parameters of the transform) passed through the command line.
+    */
     void apply(const vector <string>& arguments) override;
 };
 
