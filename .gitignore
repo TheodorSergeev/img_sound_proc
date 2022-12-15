@@ -17,3 +17,4 @@ Testing/
 my_test*
 CTestTestfile.cmake
 out.png
+out.txt
