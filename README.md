@@ -2,7 +2,7 @@
 
 ## Description
 
-Programming Concepts in Scientific Computing.
+Course project for the course Programming Concepts in Scientific Computing.
 
 Authors: Yihan Wang, Fedor Sergeev
 
@@ -78,10 +78,12 @@ C. (Experimental) If you use Ubuntu-like Linux distribution you might be able to
 
 ### Usage
 
+- The software is used through the command line. The user specifies a transform, an input and output file names, and possibly additional transform parameters. As a result, the transform with the specified parameters will be applied to the input data and the output will be saved to the specified location. Currently only grayscale images are supported as input, and output can be either and image or a text file depending on the transform.
+
 - The command is structured the following way
     `./img_sound_proc <input file name> <output file name> <transform> <parameters>`
 
-- Examples:
+- Examples: (here all available transforms are presented)
     - Apply a threshold [30, 200]: `./img_sound_proc /data/images/cameraman.tif /out.png 30 200`
     - Compute a histogram of an image: `./img_sound_proc /data/images/cameraman.tif /out.txt`
     - FFT2D transform for frequency domain: `./img_sound_proc fft2Dfreq /data/images/cameraman.tif /out.txt`
@@ -104,15 +106,17 @@ C. (Experimental) If you use Ubuntu-like Linux distribution you might be able to
 
 ## Future work
 
-Technical
-
+Todo
     - Implement parser for the inverse 2D Fourier transform (ifft2D, read complex matrix)
     - Implement new IO options (audio processing using AudioFile)
     - Create tests for parsers in particular and increase test coverage in general
     - Add more transforms (contour extraction and noise removal)
-
-New directions
-
-    - Implement color image processing (possibly vector of Eigen matrices for channels)
     - Simplify OpenCV building (select options to turn off non-IO components)
-    - Develop new processing method (currently it is not possible to chain 2 transforms without saving an intermediate file, which is not ideal if the transforms are applied to multiple images)
+
+Problems
+    - Correctness of FFT1D, LowpassFilter and HighpassFilter (either the tests or the transforms are faulty)
+
+Limitations
+    - Only 1D or 2D input is supported (to enable color image processing could use vector of Eigen matrices for channels)
+    - Not possible to chain 2 transforms without saving an intermediate file, which is not ideal if the transforms are applied to multiple images
+    - Doesn't work on EPFL' VDI (not possible to build OpenCV and install Google Test)
