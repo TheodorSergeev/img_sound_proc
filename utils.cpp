@@ -1,10 +1,11 @@
 #include "utils.hpp"
+#include <complex>
 
 
 /* Readers/writers for Eigen matrices */
 
 MatrixXi readIntMatrix(const string& inp_fname) {
-    string extension(std::filesystem::path(inp_fname).extension());
+    string extension(std::experimental::filesystem::path(inp_fname).extension());
 
     cout << inp_fname << " " << cv::haveImageReader(inp_fname) << "\n";
 
@@ -38,8 +39,28 @@ void writeIntMatrix(const string& out_fname, const MatrixXi& matrix) {
     }
 }
 
+void writeDoubleMatrix(const string& out_fname, const MatrixXd& matrix) {
+
+    std::ofstream write_output(out_fname);
+    assert(write_output.is_open());
+    write_output << matrix;
+    write_output.close();
+    cout << "File saved: " << out_fname << "\n";
+    //Under what circumstances will write fail?
+}
+
+void writeComplexMatrix(const string& out_fname, const Eigen::Matrix<std::complex<double>,-1, -1>& matrix) {
+
+    std::ofstream write_output(out_fname);
+    assert(write_output.is_open());
+    write_output << matrix;
+    write_output.close();
+    cout << "File saved: " << out_fname << "\n";
+    //Under what circumstances will write fail?
+}
+
 MatrixXd readFloatMatrix(const string& inp_fname) {
-    string extension(std::filesystem::path(inp_fname).extension());
+    string extension(std::experimental::filesystem::path(inp_fname).extension());
 
     if (extension == "wav" || extension == "aiff") {
         AudioFile<float> audioFile;

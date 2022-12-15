@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <string>
-#include <filesystem>
+#include <experimental/filesystem>
 #include "Eigen/Dense"
 #include "AudioFile.h"
 #include <opencv2/opencv.hpp>
@@ -22,6 +22,8 @@ using Eigen::MatrixXd;
  */
 MatrixXi readIntMatrix(const string& inp_fname);
 
+// todo: Eigen::Matrix<std::complex<double>,-1, -1> readComplexMatrix(const string& inp_fname);
+
 /**
  * @brief Save integer matrix in a file.
  * Supported formats: image (e.g. png and tiff).
@@ -30,6 +32,11 @@ MatrixXi readIntMatrix(const string& inp_fname);
  * @param matrix 
  */
 void writeIntMatrix(const string& out_fname, const MatrixXi& matrix);
+
+void writeDoubleMatrix(const string& out_fname, const MatrixXd& matrix);
+
+void writeComplexMatrix(const string& out_fname, const Eigen::Matrix<std::complex<double>,-1, -1>& matrix);
+
 MatrixXd readFloatMatrix(const string& inp_fname);
 
 /**

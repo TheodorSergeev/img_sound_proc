@@ -102,5 +102,45 @@ public:
     void apply(const vector <string>& arguments) override;
 };
 
+class HistogramParser: public Parser<MatrixXi, MatrixXd> {
+public:
+    HistogramParser();
+    Transform<MatrixXi, MatrixXd>* parse(const vector<string>& arguments) override;
+    void apply(const vector <string>& arguments) override;
+};
+
+class FFT2DFreqParser: public Parser<MatrixXi, Eigen::Matrix<std::complex<double>,-1, -1>>{
+public:
+    FFT2DFreqParser();
+    Transform<MatrixXi, Eigen::Matrix<std::complex<double>,-1, -1>>* parse(const vector<string>& arguments) override;
+    void apply(const vector <string>& arguments) override;
+};
+
+class FFT2DMagParser: public Parser<MatrixXi, Eigen::Matrix<std::complex<double>,-1, -1>>{
+public:
+    FFT2DMagParser();
+    FFT2D* parse(const vector<string>& arguments) override;
+    void apply(const vector <string>& arguments) override;
+};
+
+class iFFT2DParser: public Parser<Eigen::Matrix<std::complex<double>,-1, -1>, MatrixXi>{
+    iFFT2DParser();
+    Transform<Eigen::Matrix<std::complex<double>,-1, -1>, MatrixXi>* parse(const vector<string>& arguments) override;
+    void apply(const vector <string>& arguments) override;
+};
+
+class HighpassFilterParser: public Parser<MatrixXi, MatrixXi> {
+public:
+    HighpassFilterParser();
+    Transform<MatrixXi, MatrixXi>* parse(const vector<string>& arguments) override;
+    void apply(const vector <string>& arguments) override;
+};
+
+class LowpassFilterParser: public Parser<MatrixXi, MatrixXi> {
+public:
+    LowpassFilterParser();
+    Transform<MatrixXi, MatrixXi>* parse(const vector<string>& arguments) override;
+    void apply(const vector <string>& arguments) override;
+};
 
 #endif

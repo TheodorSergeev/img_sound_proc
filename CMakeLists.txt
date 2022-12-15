@@ -12,7 +12,8 @@ set(CMAKE_CXX_STANDARD 17)
 # modify if using different versions or paths
 include_directories(./eigen-3.4.0/)
 include_directories(./AudioFile/)
-#include_directories(./opencv/build/include/opencv2/)
+# opencv2 path has been modified
+include_directories(./opencv/build/opencv2/)
 include_directories(./opencv/build/lib/)
 set("OpenCV_DIR" "./opencv/build/")
 
