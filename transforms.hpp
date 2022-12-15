@@ -10,10 +10,12 @@
 #include <iostream>
 #include <fstream>
 
+
 using std::vector;
 using Eigen::MatrixXi;
 using Eigen::MatrixXd;
 using Eigen::Dynamic;
+
 
 /**
  * @brief Interface of transformers (i.e. desired process for input signal).
@@ -32,6 +34,7 @@ public:
      */
     virtual TOutput transform(const TInput& item_) = 0;
 };
+
 
 /**
  * @brief transformer for filter thresholding the grayscale.
@@ -57,12 +60,12 @@ public:
     MatrixXi transform(const MatrixXi& item) override;
 };
 
+
 /**
  * @brief transformer for calculating the grayscale intensity histogram.
  */
 class Histogram: public Transform<MatrixXi, MatrixXd> {
 public:
-
     /**
     * @brief Constructor for Histogram with specified thresholding arguments
     */
@@ -111,27 +114,30 @@ private:
     int transformed;
 
 public:
-    FFT1D( int n = 1){
-        step = n;
-        transformed = 0;
-    }
-
+    FFT1D(int n = 1);
     Eigen::Matrix<std::complex<double>,1, Dynamic> transform(const MatrixXi& item) override;
     Eigen::Matrix<std::complex<double>,1, Dynamic> getMagnitude();
 };
 
 
+/**
+ * @brief Inverse Fourier transform in 1d
+ * 
+ */
 class iFFT1D: public Transform<Eigen::Matrix<std::complex<double>,1, -1>, Eigen::Matrix<int,1, -1>> {
 private:
     Eigen::Matrix<int,1, Dynamic> mspatialDomain;
     int transformed = 0;
 
 public:
-    explicit iFFT1D() = default;
     Eigen::Matrix<int,1, Dynamic> transform(const Eigen::Matrix<std::complex<double>,1, -1>& item) override;
 };
 
 
+/**
+ * @brief Fourier transform in 2d
+ * 
+ */
 class FFT2D: public Transform<MatrixXi, Eigen::Matrix<std::complex<double>,-1, -1>> {
 private:
     Eigen::Matrix<std::complex<double>,-1, -1> mfrequencyDomain;
@@ -140,61 +146,56 @@ private:
     int transformed;
 
 public:
-    FFT2D(int n = 1){
-        step = n;
-        transformed = 0;
-    }
-
+    FFT2D(int n = 1);
     Eigen::Matrix<std::complex<double>,-1, -1> transform(const MatrixXi& item) override;
-    Eigen::Matrix<std::complex<double>,-1, -1> getMagnitude(){
-        if (transformed == 0){
-            throw std::logic_error("perform transform first");
-        }
-        return mMagnitude;
-
-    }
+    Eigen::Matrix<std::complex<double>,-1, -1> getMagnitude();
 };
 
 
+/**
+ * @brief Inverse Fourier transform in 2d
+ * 
+ */
 class iFFT2D: public Transform<Eigen::Matrix<std::complex<double>,-1, -1>, Eigen::Matrix<int,-1, -1>> {
 private:
     Eigen::Matrix<int,-1, -1> mspatialDomain;
     int transformed = 0;
 
 public:
-    explicit iFFT2D() = default;
     Eigen::Matrix<int,-1, -1> transform(const Eigen::Matrix<std::complex<double>,-1, -1>& item) override;
 };
 
 
+/**
+ * @brief Lowpass filter using 2d Fourier trasnforms
+ * 
+ */
 class LowpassFilter : public Transform<MatrixXi,MatrixXi> {
 private:
     double thr;
     int stp;
     MatrixXi filtered;
-    int transformed = 0;
+    int transformed;
 
 public:
-    explicit LowpassFilter(const double threshold, int step = 1) {
-        thr = threshold;
-        stp = step;
-    }
+    explicit LowpassFilter(const double threshold, int step = 1);
     MatrixXi transform(const MatrixXi& item) override;
 };
 
 
+/**
+ * @brief Highpass filter using 2d Fourier trasnforms
+ * 
+ */
 class HighpassFilter : public Transform<MatrixXi,MatrixXi> {
 private:
     double thr;
     int stp;
     MatrixXi filtered;
-    int transformed = 0;
+    int transformed;
 
 public:
-    explicit HighpassFilter(const double threshold, int step = 1) {
-        thr = threshold;
-        stp = step;
-    }
+    explicit HighpassFilter(const double threshold, int step = 1);
     MatrixXi transform(const MatrixXi& item) override;
 };
 
