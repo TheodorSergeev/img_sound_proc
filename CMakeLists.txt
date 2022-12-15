@@ -30,12 +30,12 @@ file(WRITE opencv/build/CPackSourceConfig.cmake "${FILE_CONTENTS}")
 #]]
 
 
-# get Googlet Test
-#include(FetchContent)
-#FetchContent_Declare(
-#  googletest
-#  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
-#)
+# get Google Test
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
 
 
 # Include directories (modify if using different versions or paths)
@@ -54,11 +54,9 @@ target_link_libraries(img_sound_proc stdc++fs ${OpenCV_LIBS})
 
 
 # Link libraries for tests (todo: separate into a different cmake file?)
-#[[
 enable_testing()
 add_executable(my_test test.cpp utils.cpp transforms.cpp parsing.cpp)
 find_package(GTest REQUIRED)
 target_link_libraries(my_test stdc++fs ${OpenCV_LIBS} GTest::gtest_main)
 include(GoogleTest)
 gtest_discover_tests(my_test)
-#]]

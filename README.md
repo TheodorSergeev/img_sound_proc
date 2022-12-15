@@ -87,24 +87,32 @@ C. (Experimental) If you use Ubuntu-like Linux distribution you might be able to
     - FFT2D transform for frequency domain: `./img_sound_proc fft2Dfreq /data/images/cameraman.tif /out.txt`
     - FFT2D transform for magnitude: `./img_sound_proc fft2Dmag /data/images/cameraman.tif /out.txt`
     - Lowpass filter: `./img_sound_proc lowpass /data/images/cameraman.tif /out.png 250`
-    - Highpass filter: `./img_sound_proc lowpass /data/images/cameraman.tif /out.png 250`
+    - Highpass filter: `./img_sound_proc highpass /data/images/cameraman.tif /out.png 250`
     - (parser not implemented) Inverse FFT2D transform: `./img_sound_proc ifft2D /in.txt /out.txt`
 
-- Running tests:
-    - After building simply run `ctest` in the `img_sound_proc` folder
+- Tests: (to run simply execute `ctest` in the `img_sound_proc` folder)
+    - `OPENCV2EIGEN`: correctness of opencv -> eigen matrix conversion (check size and coefficients in a constant matrix)
+    - `EIGEN2OPENCV`: correctness of eigen -> opencv matrix conversion (check size and coefficients in a constant matrix)
+    - `THRESHOLDING`: correctness of Thresholding transform (check output on a sample matrix)
+    - `HISTOGRAM`: correctness of Thresholding transform (check output on a sample matrix)
+    - `FFT1DTEST`: correctness of FFT1D transform (check output on a sample matrix)
+    - `FFT2DTEST`: correctness of FFT2D transform (check output on a sample matrix)
+    - `FFT1DANDINVERSE`: correctness of FFT1D and  iFFT1D transforms (check iFFT(FFT) = identity)
+    - `FFT2DANDINVERSE`: correctness of FFT2D and  iFFT2D transforms (check iFFT(FFT) = identity)
+    - `LOWPASSFILTER`: correctness of LowpassFilter transform (check output on a sample matrix)
+    - `HIGHPASSFILTER`: correctness of HighpassFilter transform (check output on a sample matrix)
 
 ## Future work
 
 Technical
 
     - Implement parser for the inverse 2D Fourier transform (ifft2D, read complex matrix)
-    -
-
-New features
-
     - Implement new IO options (audio processing using AudioFile)
-    - Create tests for parsers
-    - Implement color image processing (possibly vector of Eigen matrices for channels)
+    - Create tests for parsers in particular and increase test coverage in general
     - Add more transforms (contour extraction and noise removal)
+
+New directions
+
+    - Implement color image processing (possibly vector of Eigen matrices for channels)
     - Simplify OpenCV building (select options to turn off non-IO components)
     - Develop new processing method (currently it is not possible to chain 2 transforms without saving an intermediate file, which is not ideal if the transforms are applied to multiple images)

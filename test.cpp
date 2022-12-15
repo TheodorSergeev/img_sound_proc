@@ -15,7 +15,7 @@ using Eigen::MatrixXd;
  * @brief Check correctness of opencv2eigen (size and contents).
  * 
  */
-TEST(UtilsTest, opencv2eigen) {
+TEST(UtilsTest, OPENCV2EIGEN) {
     cv::Mat image(2, 3, CV_8U, 4);
     MatrixXi test_mat = opencv2eigen(image);
 
@@ -32,7 +32,7 @@ TEST(UtilsTest, opencv2eigen) {
  * @brief Check correctness of eigen2opencv (size and contents).
  * 
  */
-TEST(UtilsTest, eigen2opencv) {
+TEST(UtilsTest, EIGEN2OPENCV) {
     MatrixXi image(2, 3);
     image << 4, 4, 4, 
              4, 4, 4;
@@ -95,17 +95,15 @@ TEST_F(TransformTest, THRESHOLDING){
  */
 TEST_F(TransformTest, HISTOGRAM){
     Histogram his;
-    his.transform(item_2);
+    MatrixXd mat = his.transform(item_2);
 
-    /*
     /// Check return size
-    EXPECT_EQ(his.mHist.cols(),4);
+    EXPECT_EQ(mat.cols(),4);
 
-    ASSERT_NEAR(his.mHist(0,0), 0.25, 1e-10);
-    ASSERT_NEAR(his.mHist(0,1), 0.125, 1e-10);
-    ASSERT_NEAR(his.mHist(0,2), 0.125, 1e-10);
-    ASSERT_NEAR(his.mHist(0,3), 0.5, 1e-10);
-    */
+    ASSERT_NEAR(mat(0,0), 0.25, 1e-5);
+    ASSERT_NEAR(mat(0,1), 0.125, 1e-5);
+    ASSERT_NEAR(mat(0,2), 0.125, 1e-5);
+    ASSERT_NEAR(mat(0,3), 0.5, 1e-5);
 }
 
 /**
