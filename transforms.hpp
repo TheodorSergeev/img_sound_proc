@@ -22,7 +22,6 @@ using Eigen::Dynamic;
  * @tparam TInput Type of the transform input (e.g., Eigen integer matrix).
  * @tparam TOutput Type of the transform output (e.g., Eigen complex matrix).
  */
-
 template <typename TInput, typename TOutput>
 class Transform {
 public:
@@ -99,32 +98,26 @@ void mainFFT1D(std::complex<float> signal[], int start, int fin, int step1, floa
  */
 void normalize(std::complex<float> f[], int n, float norm);
 
+
+/**
+ * @brief Fourier transform in 1D
+ * 
+ */
 class FFT1D: public Transform<MatrixXi, Eigen::Matrix<std::complex<double>,1, Dynamic>> {
 private:
     Eigen::Matrix<std::complex<double>,1, Dynamic> mfrequencyDomain;
     Eigen::Matrix<std::complex<double>,1, Dynamic> mMagnitude;
     int step;
-    int transformed =0;
+    int transformed;
+
 public:
     FFT1D( int n = 1){
         step = n;
+        transformed = 0;
     }
+
     Eigen::Matrix<std::complex<double>,1, Dynamic> transform(const MatrixXi& item) override;
-    Eigen::Matrix<std::complex<double>,1, Dynamic> getMagnitude(){
-        if (transformed != 1){
-            try {
-                throw std::logic_error("perform transform first");
-            }
-            catch (const std::logic_error &e) {
-                std::cout << e.what() << std::endl;
-            }
-        }
-        return mMagnitude;
-
-    }
-    void save_freq(std::string filename = "unspecified item");
-    void save_mag(std::string filename = "unspecified item");
-
+    Eigen::Matrix<std::complex<double>,1, Dynamic> getMagnitude();
 };
 
 
@@ -132,11 +125,10 @@ class iFFT1D: public Transform<Eigen::Matrix<std::complex<double>,1, -1>, Eigen:
 private:
     Eigen::Matrix<int,1, Dynamic> mspatialDomain;
     int transformed = 0;
+
 public:
     explicit iFFT1D() = default;
     Eigen::Matrix<int,1, Dynamic> transform(const Eigen::Matrix<std::complex<double>,1, -1>& item) override;
-    void save(std::string filename = "unspecified item");
-
 };
 
 
@@ -145,28 +137,22 @@ private:
     Eigen::Matrix<std::complex<double>,-1, -1> mfrequencyDomain;
     Eigen::Matrix<std::complex<double>,-1, -1> mMagnitude;
     int step;
-    int transformed =0;
+    int transformed;
 
 public:
-
     FFT2D(int n = 1){
         step = n;
+        transformed = 0;
     }
+
     Eigen::Matrix<std::complex<double>,-1, -1> transform(const MatrixXi& item) override;
     Eigen::Matrix<std::complex<double>,-1, -1> getMagnitude(){
-        if (transformed != 1){
-            try {
-                throw std::logic_error("perform transform first");
-            }
-            catch (const std::logic_error &e) {
-                std::cout << e.what() << std::endl;
-            }
+        if (transformed == 0){
+            throw std::logic_error("perform transform first");
         }
         return mMagnitude;
 
     }
-    void save_freq(std::string filename = "unspecified item");
-    void save_mag(std::string filename = "unspecified item");
 };
 
 
@@ -178,7 +164,6 @@ private:
 public:
     explicit iFFT2D() = default;
     Eigen::Matrix<int,-1, -1> transform(const Eigen::Matrix<std::complex<double>,-1, -1>& item) override;
-    void save(std::string filename = "unspecified item");
 };
 
 
@@ -195,7 +180,6 @@ public:
         stp = step;
     }
     MatrixXi transform(const MatrixXi& item) override;
-    void save(std::string filename = "unspecified item");
 };
 
 
@@ -212,7 +196,6 @@ public:
         stp = step;
     }
     MatrixXi transform(const MatrixXi& item) override;
-    void save(std::string filename = "unspecified item");
 };
 
 #endif

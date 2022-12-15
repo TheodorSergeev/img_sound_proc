@@ -13,6 +13,10 @@
 Thresholding::Thresholding(const int thr_min_, const int thr_max_) {
     thr_min = thr_min_;
     thr_max = thr_max_;
+
+    if (thr_min > thr_max) {
+        throw std::invalid_argument("Minimum value of the threshold cannot be bigger then the maximum");
+    }
 }
 
 MatrixXi Thresholding::transform(const MatrixXi& item) {
@@ -93,6 +97,14 @@ void normalize(std::complex<float> f[], int n, float norm) {
     }
 }
 
+Eigen::Matrix<std::complex<double>,1, Dynamic> FFT1D::getMagnitude() {
+    if (transformed == 0){
+        throw std::logic_error("perform transform first");
+    }
+    return mMagnitude;
+
+}
+
 Eigen::Matrix<std::complex<double>,1, Dynamic> FFT1D::transform(const MatrixXi& item){
     int nrows = item.rows();
     int ncols = item.cols();
@@ -132,52 +144,6 @@ Eigen::Matrix<std::complex<double>,1, Dynamic> FFT1D::transform(const MatrixXi& 
     return mfrequencyDomain;
 }
 
-void FFT1D::save_freq(std::string filename) {
-    if (transformed != 1){
-        try {
-            throw std::logic_error("perform transform first");
-        }
-        catch (const std::logic_error &e) {
-            std::cout << e.what() << std::endl;
-        }
-    }
-    std::ofstream write_output(filename + " FFT1D_frequency.dat");
-    assert(write_output.is_open());
-    int nrows = mfrequencyDomain.rows();
-    int ncols = mfrequencyDomain.cols();
-
-    for (int i = 0; i < nrows; ++i) {
-        for (int j = 0; j < ncols; ++j) {
-            write_output << mfrequencyDomain(i,j) <<" ";
-        }
-        write_output << "\n";
-    }
-    write_output.close();
-}
-
-void FFT1D::save_mag(std::string filename) {
-    if (transformed != 1){
-        try {
-            throw std::logic_error("perform transform first");
-        }
-        catch (const std::logic_error &e) {
-            std::cout << e.what() << std::endl;
-        }
-    }
-    std::ofstream write_output(filename + " FFT1D_magnitude.dat");
-    assert(write_output.is_open());
-    int nrows = mfrequencyDomain.rows();
-    int ncols = mfrequencyDomain.cols();
-
-    for (int i = 0; i < nrows; ++i) {
-        for (int j = 0; j < ncols; ++j) {
-            write_output << mMagnitude(i,j) <<" ";
-        }
-        write_output << "\n";
-    }
-    write_output.close();
-}
-
 
 Eigen::Matrix<int,1, Dynamic> iFFT1D::transform(const Eigen::Matrix<std::complex<double>,1, -1>& item){
     int nrows = item.rows();
@@ -207,29 +173,6 @@ Eigen::Matrix<int,1, Dynamic> iFFT1D::transform(const Eigen::Matrix<std::complex
     transformed=1;
     std::cout<< mspatialDomain;
     return mspatialDomain;
-}
-
-void iFFT1D::save(std::string filename) {
-    if (transformed != 1){
-        try {
-            throw std::logic_error("perform transform first");
-        }
-        catch (const std::logic_error &e) {
-            std::cout << e.what() << std::endl;
-        }
-    }
-    std::ofstream write_output(filename + " iFFT1D.dat");
-    assert(write_output.is_open());
-    int nrows = mspatialDomain.rows();
-    int ncols = mspatialDomain.cols();
-
-    for (int i = 0; i < nrows; ++i) {
-        for (int j = 0; j < ncols; ++j) {
-            write_output << mspatialDomain(i,j) <<" ";
-        }
-        write_output << "\n";
-    }
-    write_output.close();
 }
 
 
@@ -281,51 +224,6 @@ Eigen::Matrix<std::complex<double>,-1, -1> FFT2D::transform(const MatrixXi& item
 
 }
 
-void FFT2D::save_freq(std::string filename) {
-    if (transformed != 1){
-        try {
-            throw std::logic_error("perform transform first");
-        }
-        catch (const std::logic_error &e) {
-            std::cout << e.what() << std::endl;
-        }
-    }
-    std::ofstream write_output(filename + " FFT2D_frequency.dat");
-    assert(write_output.is_open());
-    int nrows = mfrequencyDomain.rows();
-    int ncols = mfrequencyDomain.cols();
-
-    for (int i = 0; i < nrows; ++i) {
-        for (int j = 0; j < ncols; ++j) {
-            write_output << mfrequencyDomain(i,j) <<" ";
-        }
-        write_output << "\n";
-    }
-    write_output.close();
-}
-
-void FFT2D::save_mag(std::string filename) {
-    if (transformed != 1){
-        try {
-            throw std::logic_error("perform transform first");
-        }
-        catch (const std::logic_error &e) {
-            std::cout << e.what() << std::endl;
-        }
-    }
-    std::ofstream write_output(filename + " FFT2D_magnitude.dat");
-    assert(write_output.is_open());
-    int nrows = mfrequencyDomain.rows();
-    int ncols = mfrequencyDomain.cols();
-
-    for (int i = 0; i < nrows; ++i) {
-        for (int j = 0; j < ncols; ++j) {
-            write_output << mfrequencyDomain(i,j) <<" ";
-        }
-        write_output << "\n";
-    }
-    write_output.close();
-}
 
 Eigen::Matrix<int,-1, -1> iFFT2D::transform(const Eigen::Matrix<std::complex<double>,-1, -1>& item){
     int nrows = item.rows();
@@ -364,28 +262,6 @@ Eigen::Matrix<int,-1, -1> iFFT2D::transform(const Eigen::Matrix<std::complex<dou
     return mspatialDomain;
 }
 
-void iFFT2D::save(std::string filename) {
-    if (transformed != 1){
-        try {
-            throw std::logic_error("perform transform first");
-        }
-        catch (const std::logic_error &e) {
-            std::cout << e.what() << std::endl;
-        }
-    }
-    std::ofstream write_output(filename + " iFFT2D.dat");
-    assert(write_output.is_open());
-    int nrows = mspatialDomain.rows();
-    int ncols = mspatialDomain.cols();
-
-    for (int i = 0; i < nrows; ++i) {
-        for (int j = 0; j < ncols; ++j) {
-            write_output << mspatialDomain(i,j) <<" ";
-        }
-        write_output << "\n";
-    }
-    write_output.close();
-}
 
 MatrixXi LowpassFilter::transform(const MatrixXi& item){
     int nrows = item.rows();
@@ -418,29 +294,6 @@ MatrixXi LowpassFilter::transform(const MatrixXi& item){
 
 }
 
-void LowpassFilter::save(std::string filename) {
-    if (transformed != 1){
-        try {
-            throw std::logic_error("perform transform first");
-        }
-        catch (const std::logic_error &e) {
-            std::cout << e.what() << std::endl;
-        }
-    }
-    std::ofstream write_output(filename + " LowpassFilter.dat");
-    assert(write_output.is_open());
-    int nrows = filtered.rows();
-    int ncols = filtered.cols();
-
-    for (int i = 0; i < nrows; ++i) {
-        for (int j = 0; j < ncols; ++j) {
-            write_output << filtered(i,j) <<" ";
-        }
-        write_output << "\n";
-    }
-    write_output.close();
-}
-
 
 MatrixXi HighpassFilter::transform(const MatrixXi& item){
     int nrows = item.rows();
@@ -470,27 +323,4 @@ MatrixXi HighpassFilter::transform(const MatrixXi& item){
     filtered = b.transform(copyfrequency);
     transformed = 1;
     return filtered;
-}
-
-void HighpassFilter::save(std::string filename) {
-    if (transformed != 1){
-        try {
-            throw std::logic_error("perform transform first");
-        }
-        catch (const std::logic_error &e) {
-            std::cout << e.what() << std::endl;
-        }
-    }
-    std::ofstream write_output(filename + " HighpassFilter.dat");
-    assert(write_output.is_open());
-    int nrows = filtered.rows();
-    int ncols = filtered.cols();
-
-    for (int i = 0; i < nrows; ++i) {
-        for (int j = 0; j < ncols; ++j) {
-            write_output << filtered(i,j) <<" ";
-        }
-        write_output << "\n";
-    }
-    write_output.close();
 }
