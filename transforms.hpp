@@ -7,45 +7,96 @@
 #include <cmath>
 #include <complex>
 #include <string>
-
-#include <iostream> // shouldn't be here as IO is covered by parsers
-#include <fstream> // shouldn't be here as IO is covered by parsers
+#include <iostream>
+#include <fstream>
 
 using std::vector;
 using Eigen::MatrixXi;
 using Eigen::MatrixXd;
 using Eigen::Dynamic;
 
+/**
+ * @brief Interface of transformers (i.e. desired process for input signal).
+ * The class describes how the input signal is processed
+ *
+ * @tparam TInput Type of the transform input (e.g., Eigen integer matrix).
+ * @tparam TOutput Type of the transform output (e.g., Eigen complex matrix).
+ */
 
 template <typename TInput, typename TOutput>
 class Transform {
 public:
+    /**
+     * @brief Implementation of the transform.
+     *
+     * @return TOutput type Eigen matrix.
+     */
     virtual TOutput transform(const TInput& item_) = 0;
 };
 
-
+/**
+ * @brief transformer for filter thresholding the grayscale.
+ */
 class Thresholding: public Transform<MatrixXi, MatrixXi> {
 private:
-    int thr_min, thr_max;
+    int thr_min, thr_max; /// lower and upper threshold
 
 public:
+    /**
+    * @brief Constructor for Thresholding with specified thresholding arguments
+    *
+    * @param thr_min lower threshold
+    * @param thr_max upper threshold
+    */
     explicit Thresholding(const int thr_min_, const int thr_max_);
 
+    /**
+     * @brief Implementation of the thresholding transform.
+     *
+     * @return Eigen integer matrix for the filtered space domain.
+     */
     MatrixXi transform(const MatrixXi& item) override;
 };
 
-
+/**
+ * @brief transformer for calculating the grayscale intensity histogram.
+ */
 class Histogram: public Transform<MatrixXi, MatrixXd> {
 public:
+
+    /**
+    * @brief Constructor for Histogram with specified thresholding arguments
+    */
     explicit Histogram();
 
+    /**
+     * @brief Implementation of the histogram transform.
+     *
+     * @return Eigen double matrix for the calculated intensity histogram.
+     */
     MatrixXd transform(const MatrixXi& item) override;
 };
 
 
-
+/**
+ * @brief mainbody of the 1D Fast Fourier Transform realized with Cooley–Tukey FFT algorithm.
+ *
+ * @param signal[] whole signal being transformed
+ * @param start beginning position of the signal being processed at current step
+ * @param fin ending position of the signal being processed at current step
+ * @param step1 step of the FFT transform
+ * @param inv for FFT, inv = -1, for inverse FFT, inv = 1
+ * @param buffer[] float complex array for temporarily store transformed results
+ */
 void mainFFT1D(std::complex<float> signal[], int start, int fin, int step1, float inv, std::complex<float> buffer[]);
 
+/**
+ * @brief normalization of the FFT transformed results, assuring signal remains constant after FFT and then inverse FFT.
+ *
+ * @param f[] float complex array being normalized
+ * @param n size of f[]
+ * @param norm normalization divider
+ */
 void normalize(std::complex<float> f[], int n, float norm);
 
 class FFT1D: public Transform<MatrixXi, Eigen::Matrix<std::complex<double>,1, Dynamic>> {
