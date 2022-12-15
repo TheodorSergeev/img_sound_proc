@@ -33,8 +33,22 @@ MatrixXi readIntMatrix(const string& inp_fname);
  */
 void writeIntMatrix(const string& out_fname, const MatrixXi& matrix);
 
+/**
+ * @brief Save double matrix in a file.
+ * Supported formats: image (e.g. png and tiff).
+ *
+ * @param out_fname
+ * @param matrix
+ */
 void writeDoubleMatrix(const string& out_fname, const MatrixXd& matrix);
 
+/**
+ * @brief Save double complex matrix in a file. Application e.g. save frequency domain after FFT transform
+ *
+ *
+ * @param out_fname
+ * @param matrix
+ */
 void writeComplexMatrix(const string& out_fname, const Eigen::Matrix<std::complex<double>,-1, -1>& matrix);
 
 MatrixXd readFloatMatrix(const string& inp_fname);
