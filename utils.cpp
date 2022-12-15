@@ -65,7 +65,8 @@ MatrixXd readFloatMatrix(const string& inp_fname) {
     if (extension == "wav" || extension == "aiff") {
         AudioFile<float> audioFile;
         audioFile.load(inp_fname);
-        // return aufiodileMat2Eigen
+        // return audiofile2eigen
+        throw std::logic_error("audiofile2eigen is not yet implemented");
     } else {
         throw std::invalid_argument("Cannot read an integer matrix from " + inp_fname);
     }
@@ -73,8 +74,8 @@ MatrixXd readFloatMatrix(const string& inp_fname) {
 
     MatrixXd tmp_inp_img(3,3);
     tmp_inp_img << 1.0, 2.0, 3.0,
-                    4.0, 5.0, 6.0,
-                    7.0, 8.0, 9.0;
+                   4.0, 5.0, 6.0,
+                   7.0, 8.0, 9.0;
     return tmp_inp_img;
 }
 
