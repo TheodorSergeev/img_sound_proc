@@ -8,9 +8,11 @@
 #include "utils.hpp"
 #include "transforms.hpp"
 
+
 using std::string;
 using std::to_string;
 using std::vector;
+using std::make_shared;
 using Eigen::MatrixXi;
 using Eigen::MatrixXd;
 

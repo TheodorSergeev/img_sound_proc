@@ -6,8 +6,13 @@ void parse_cl_input(int argc, const char* argv[]) {
     const char* HELP_MSG = "asdasd";
 
     vector<std::shared_ptr<AbstractParser>> parsers_list = {
-        std::make_shared<ThresholdingParser>(),
-        std::make_shared<HistogramParser>(),
+        make_shared<ThresholdingParser>(),
+        make_shared<HistogramParser>(),
+        make_shared<FFT2DFreqParser>(),
+        make_shared<FFT2DMagParser>(),
+        make_shared<iFFT2DParser>(),
+        make_shared<HighpassFilterParser>(),
+        make_shared<LowpassFilterParser>()
     };
     // todo: pass as an argument?
     
@@ -192,7 +197,7 @@ FFT2D* FFT2DMagParser::parse(const vector<string>& arguments){
 void FFT2DMagParser::apply(const vector<string> &arguments) {
     if (arguments.size() != 2 + get_arg_num() and arguments.size() != 2) {
         throw std::invalid_argument(
-                "Incorect number of parameters for " + get_name() + \
+            "Incorect number of parameters for " + get_name() + \
             "\nRequired: 0 or 1"  + \
             "\nProvided: " + to_string(arguments.size() - 2) + "\n"
         );
@@ -251,7 +256,7 @@ Transform<MatrixXi, MatrixXi>* HighpassFilterParser::parse(const vector<string>&
     cout << "n_args = " << arguments.size() << "\n";
 
     if (arguments.size() != 2 + arg_num)
-        throw std::invalid_argument("Highpass filter requires one argument.");
+        throw std::invalid_argument("Highpass filter requires one argument (threshold).");
 
     // throws an exception if not convertible to int
     int thr_high = std::stoi(arguments[2]);
@@ -283,7 +288,7 @@ Transform<MatrixXi, MatrixXi>* LowpassFilterParser::parse(const vector<string>& 
     cout << "n_args = " << arguments.size() << "\n";
 
     if (arguments.size() != 2 + arg_num)
-        throw std::invalid_argument("Lowpass filter requires one argument.");
+        throw std::invalid_argument("Lowpass filter requires one argument (threshold).");
 
     // throws an exception if not convertible to int
     int thr_high = std::stoi(arguments[2]);
