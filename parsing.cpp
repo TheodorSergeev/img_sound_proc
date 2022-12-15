@@ -4,9 +4,13 @@
 void parse_cl_input(int argc, const char* argv[]) {
     const char* HELP_STR = "--help";
     const char* HELP_MSG = "asdasd";
-    std::array parsers_list = {ThresholdingParser()}; // todo: pass as an argument?
-    // todo: add parser list
 
+    vector<std::shared_ptr<AbstractParser>> parsers_list = {
+        std::make_shared<ThresholdingParser>(),
+        std::make_shared<HistogramParser>(),
+    };
+    // todo: pass as an argument?
+    
     string opt_str(argv[1]);
 
     if (argc == 1) {
@@ -20,20 +24,31 @@ void parse_cl_input(int argc, const char* argv[]) {
             cout << HELP_MSG << "\n";
         } else {
             for (auto  &parser : parsers_list) {
-                if (opt_str == parser.get_name()) {
-                    cout << "found " << parser.get_name() << "\n";
+                if (opt_str == parser->get_name()) {
+                    cout << "found " << parser->get_name() << "\n";
 
                     vector<string> arg_vec;
                     for (int i = 2; i < argc; ++i) {
                         arg_vec.emplace_back(argv[i]);
                     }
                     
-                    parser.apply(arg_vec);
+                    parser->apply(arg_vec);
                     break;
                 }
             }
         }
     }
+}
+
+
+// AbstractParser
+
+string AbstractParser::get_name() {
+    return name;
+}
+
+int AbstractParser::get_arg_num() {
+    return arg_num;
 }
 
 
@@ -48,16 +63,6 @@ void Parser<TInput, TOutput>::checkArgNum(const vector<string>& arguments) {
             "\nProvided: " + to_string(arguments.size() - 2) + "\n"
         );
     }
-}
-
-template <typename TInput, typename TOutput>
-string Parser<TInput, TOutput>::get_name() {
-    return name;
-}
-
-template <typename TInput, typename TOutput>
-int Parser<TInput, TOutput>::get_arg_num() {
-    return arg_num;
 }
 
 /*template <typename TInput, typename TOutput>
@@ -110,9 +115,10 @@ Transform<MatrixXi, MatrixXd>* HistogramParser::parse(const vector<string>& argu
     cout << "n_args = " << arguments.size() << "\n";
 
     if (arguments.size() != 2 + arg_num)
-        throw std::invalid_argument("Thresholding requires no arguments.");
+        throw std::invalid_argument("Histogram requires no arguments.");
     return new Histogram();
 }
+
 void HistogramParser::apply(const vector<string> &arguments) {
     checkArgNum(arguments);
     string glob_path = std::experimental::filesystem::current_path();

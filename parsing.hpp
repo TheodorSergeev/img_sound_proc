@@ -25,28 +25,14 @@ void parse_cl_input(int argc, const char* argv[]);
 
 
 /**
- * @brief Interface of parsers for transforms. 
- * The class describes how the command line arguments are treated,
- * how the transorm class is instantiated, and how input/output files are
- * processed.
+ * @brief Abstract interface of parsers for transforms. 
+ * Used for putting parsers in a list to iterate through them easily.
  * 
- * @tparam TInput Type of the transform input (e.g., Eigen integer matrix).
- * @tparam TOutput Type of the transform output (e.g., Eigen float matrix).
  */
-template <typename TInput, typename TOutput>
-class Parser {
+class AbstractParser {
 protected:
     int arg_num; /// Number of arguments that the transform requires.
     string name; /// Name of the transform in the command line.
-
-    /**
-     * @brief Check that enough arguments have been passed to the transform.
-     * By default, arg_num+2 arguments are expected (2 is for the input and output files).
-     * If the condition is not satisfied, throws an std::invalid_argument exception
-     * 
-     * @param arguments List of arguments (parameters of the transform) passed through the command line.
-     */
-    void checkArgNum(const vector<string>& arguments);
 
 public:
     /**
@@ -64,19 +50,43 @@ public:
     int get_arg_num();
 
     /**
+     * @brief Apply the transform (e.g., parse argument, load image, do the transform, save the results).
+     * 
+     * @param arguments List of arguments (parameters of the transform) passed through the command line.
+     */
+    virtual void apply(const vector <string>& arguments) = 0;
+};
+
+
+/**
+ * @brief Interface of parsers for transforms with input/output. 
+ * The class describes how the command line arguments are treated,
+ * how the transorm class is instantiated, and how input/output files are
+ * processed.
+ * 
+ * @tparam TInput Type of the transform input (e.g., Eigen integer matrix).
+ * @tparam TOutput Type of the transform output (e.g., Eigen float matrix).
+ */
+template <typename TInput, typename TOutput>
+class Parser: public AbstractParser {
+protected:
+    /**
+     * @brief Check that enough arguments have been passed to the transform.
+     * By default, arg_num+2 arguments are expected (2 is for the input and output files).
+     * If the condition is not satisfied, throws an std::invalid_argument exception
+     * 
+     * @param arguments List of arguments (parameters of the transform) passed through the command line.
+     */
+    void checkArgNum(const vector<string>& arguments);
+
+public:
+    /**
      * @brief Instantiate a corresponding transform with the specified parameters.
      * 
      * @param arguments List of arguments (parameters of the transform) passed through the command line.
      * @return Transform<TInput, TOutput>* Instance of the transform.
      */
     virtual Transform<TInput, TOutput>* parse(const vector<string>& arguments) = 0;
-
-    /**
-     * @brief Apply the transform (e.g., parse argument, load image, do the transform, save the results).
-     * 
-     * @param arguments List of arguments (parameters of the transform) passed through the command line.
-     */
-    virtual void apply(const vector <string>& arguments) = 0;
 };
 
 
