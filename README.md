@@ -104,6 +104,13 @@ C. (Experimental) If you use Ubuntu-like Linux distribution you might be able to
     - `LOWPASSFILTER`: correctness of LowpassFilter transform (check output on a sample matrix)
     - `HIGHPASSFILTER`: correctness of HighpassFilter transform (check output on a sample matrix)
 
+## Implementation details
+
+The code follows the MVC (model-view-controller) pattern. 
+    - **Model.** Transformations are implemented as subclasses of abstract interface `Transform` (see `transforms.cpp` and `transforms.hpp`). The transform specifies as template parameters types of its input and output: particular types of Eigen matrices. It also implements the virtual method `apply` that actually performs the transformation. The transform can store its parameters as private members.
+    - **View.** The user interacts with the software through the command line and input/output files. We use OpenCV and AudiFile libraries to read and write the supported formats (currently grayscale images as input and output, and text as output). The IO handling and conversion to and from Eigen matrices, with which transform work, is done simply with function (see `utils.hpp` and `utils.cpp`).
+    - **Controller.** Each transform class has a dedicated parser class. These classes store the name of the transform, implement methods for reading its parameters from the command line, and invoke the transform with the specified input/output. Given a user's input, we iterate through all available transform, checking if their name matches the command. If it does, the parser is applied with the rest of the command line inputs (see `parsers.cpp` and `parsers.cpp`).
+
 ## Future work
 
 Todo
