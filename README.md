@@ -126,6 +126,8 @@ The code follows the MVC (model-view-controller) pattern.
 - Add more transforms (contour extraction and noise removal)
 - Simplify OpenCV building (select options to turn off non-IO components)
 
+#### Problems
+- Tests fail for lowpass, highpass filters and iFFT1D (this is either due to a faulty tests or bugs in the implementation)
 
 #### Limitations
 - Only 1D or 2D input is supported (to enable color image processing could use vector of Eigen matrices for channels)
