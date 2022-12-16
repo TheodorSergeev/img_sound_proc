@@ -90,8 +90,8 @@ If you use Ubuntu-like Linux distribution you might be able to use opencv from t
     `./img_sound_proc <input file name> <output file name> <transform> <parameters>`
 
 - **Examples** (here all available transforms are presented):
-    - Apply a threshold [30, 200]: `./img_sound_proc /data/images/cameraman.tif /out.png 30 200`
-    - Compute a histogram of an image: `./img_sound_proc /data/images/cameraman.tif /out.txt`
+    - Apply a threshold [30, 200]: `./img_sound_proc threshold /data/images/cameraman.tif /out.png 30 200`
+    - Compute a histogram of an image: `./img_sound_proc histogram /data/images/cameraman.tif /out.txt`
     - FFT2D transform for frequency domain: `./img_sound_proc fft2Dfreq /data/images/cameraman.tif /out.txt`
     - FFT2D transform for magnitude: `./img_sound_proc fft2Dmag /data/images/cameraman.tif /out.txt`
     - Lowpass filter: `./img_sound_proc lowpass /data/images/cameraman.tif /out.png 250`
