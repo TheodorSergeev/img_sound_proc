@@ -115,12 +115,11 @@ TEST_F(TransformTest, FFT1DTEST){
     /// Check exception thrown
     EXPECT_THROW(fft.getMagnitude(), std::logic_error);
 
-    fft.transform(item_1);
-    auto mat = fft.getMagnitude();
+    auto mat = fft.transform(item_1);
     EXPECT_EQ(mat(0), std::complex<double>(33, 0));
     EXPECT_EQ(mat(1), std::complex<double>(-5, 5));
     EXPECT_EQ(mat(2), std::complex<double>(-1, 0));
-    EXPECT_EQ(mat(0), std::complex<double>(-5, -5));
+    EXPECT_EQ(mat(3), std::complex<double>(-5, -5));
 }
 
 /**
@@ -192,7 +191,7 @@ TEST_F(TransformTest, LOWPASSFILTER){
     EXPECT_EQ(mat1(1, 1), 6);
 
     /// test nonfiltered
-    auto mat2 = testLow_1.transform(item_1);
+    auto mat2 = testLow_2.transform(item_1);
     EXPECT_EQ(mat2(0, 0), 11);
     EXPECT_EQ(mat2(0, 1), 12);
     EXPECT_EQ(mat2(1, 0), 21);
@@ -204,8 +203,8 @@ TEST_F(TransformTest, LOWPASSFILTER){
  * 
  */
 TEST_F(TransformTest, HIGHPASSFILTER){
-    HighpassFilter testHigh_1(1);
-    HighpassFilter testHigh_2(5);
+    HighpassFilter testHigh_1(0);
+    HighpassFilter testHigh_2(1);
 
     /// test nonfiltered
     auto mat1 = testHigh_1.transform(item_1);

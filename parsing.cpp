@@ -155,7 +155,7 @@ Transform<MatrixXi, Eigen::Matrix<std::complex<double>,-1, -1>>* FFT2DFreqParser
 
     }
     else
-        throw std::invalid_argument("Thresholding requires no arguments.");
+        throw std::invalid_argument("FFT2D requires 0 or 1 arguments.");
 }
 
 void FFT2DFreqParser::apply(const vector<string> &arguments) {
@@ -191,7 +191,7 @@ FFT2D* FFT2DMagParser::parse(const vector<string>& arguments){
         return new FFT2D();
     }
     else
-        throw std::invalid_argument("Thresholding requires no arguments.");
+        throw std::invalid_argument("FFT2D requires 0 or 1 arguments.");
 }
 
 void FFT2DMagParser::apply(const vector<string> &arguments) {
