@@ -103,65 +103,106 @@ void normalize(std::complex<float> f[], int n, float norm);
 
 
 /**
- * @brief Fourier transform in 1D
+ * @brief Fast Fourier transform in 1D
  * 
  */
 class FFT1D: public Transform<MatrixXi, Eigen::Matrix<std::complex<double>,1, Dynamic>> {
 private:
-    Eigen::Matrix<std::complex<double>,1, Dynamic> mfrequencyDomain;
-    Eigen::Matrix<std::complex<double>,1, Dynamic> mMagnitude;
-    int step;
-    int transformed;
+    Eigen::Matrix<std::complex<double>,1, Dynamic> mfrequencyDomain; /// frequency of the transform
+    Eigen::Matrix<std::complex<double>,1, Dynamic> mMagnitude; /// magnitude of the transform
+    int step; /// number of steps
+    int transformed; /// flag if the transform has been applied
 
 public:
     FFT1D(int n = 1);
+
+    /**
+     * @brief Implementation of the FFT1D transform.
+     *
+     * @return Eigen complex matrix for the Fourier transform.
+     */
     Eigen::Matrix<std::complex<double>,1, Dynamic> transform(const MatrixXi& item) override;
+
+    /**
+     * @brief Get the Magnitude object
+     * 
+     * @return Eigen::Matrix<std::complex<double>,1, Dynamic> Magnitude matrix
+     */
     Eigen::Matrix<std::complex<double>,1, Dynamic> getMagnitude();
 };
 
 
 /**
- * @brief Inverse Fourier transform in 1d
+ * @brief Inverse Fast Fourier transform in 1d
  * 
  */
 class iFFT1D: public Transform<Eigen::Matrix<std::complex<double>,1, -1>, Eigen::Matrix<int,1, -1>> {
 private:
-    Eigen::Matrix<int,1, Dynamic> mspatialDomain;
-    int transformed = 0;
+    Eigen::Matrix<int,1, Dynamic> mspatialDomain; /// transform results in the spatial domain
+    int transformed = 0; /// flag if the transform has been applied
 
 public:
+    /**
+    * @brief Implementation of the inverse Fast Fourier transform in 1D
+    * 
+    * @param item Input matrix in Fourier domain
+    * @return Eigen::Matrix<int,1, Dynamic> Output matrix in spatial domain
+    */
     Eigen::Matrix<int,1, Dynamic> transform(const Eigen::Matrix<std::complex<double>,1, -1>& item) override;
 };
 
 
 /**
- * @brief Fourier transform in 2d
+ * @brief Fast Fourier Fourier transform in 2d
  * 
  */
 class FFT2D: public Transform<MatrixXi, Eigen::Matrix<std::complex<double>,-1, -1>> {
 private:
-    Eigen::Matrix<std::complex<double>,-1, -1> mfrequencyDomain;
-    Eigen::Matrix<std::complex<double>,-1, -1> mMagnitude;
-    int step;
-    int transformed;
+    Eigen::Matrix<std::complex<double>,-1, -1> mfrequencyDomain; /// frequency of the transform
+    Eigen::Matrix<std::complex<double>,-1, -1> mMagnitude; /// magnitude of the transform
+    int step; /// number of steps
+    int transformed; /// flag if the transform has been applied
 
 public:
+    /**
+     * @brief Construct a new FFT2D object with the specified number of steps
+     * 
+     * @param n Number of steps
+     */
     FFT2D(int n = 1);
+
+    /**
+     * @brief Implementation of the FFT1D transform.
+     *
+     * @return Eigen complex matrix for the Fourier transform.
+     */
     Eigen::Matrix<std::complex<double>,-1, -1> transform(const MatrixXi& item) override;
+
+    /**
+     * @brief Get the Magnitude object
+     * 
+     * @return Eigen::Matrix<std::complex<double>,1, Dynamic> Magnitude matrix
+     */
     Eigen::Matrix<std::complex<double>,-1, -1> getMagnitude();
 };
 
 
 /**
- * @brief Inverse Fourier transform in 2d
+ * @brief Inverse Fast Fourier transform in 2d
  * 
  */
 class iFFT2D: public Transform<Eigen::Matrix<std::complex<double>,-1, -1>, Eigen::Matrix<int,-1, -1>> {
 private:
-    Eigen::Matrix<int,-1, -1> mspatialDomain;
-    int transformed = 0;
+    Eigen::Matrix<int,-1, -1> mspatialDomain; /// transform results in the spatial domain
+    int transformed = 0; /// flag if the transform has been applied
 
 public:
+    /**
+     * @brief Implementation of the inverse Fast Fourier transform in 1D
+     * 
+     * @param item Input matrix in Fourier domain
+     * @return Eigen::Matrix<int,1, Dynamic> Output matrix in spatial domain
+     */
     Eigen::Matrix<int,-1, -1> transform(const Eigen::Matrix<std::complex<double>,-1, -1>& item) override;
 };
 
@@ -172,13 +213,26 @@ public:
  */
 class LowpassFilter : public Transform<MatrixXi,MatrixXi> {
 private:
-    double thr;
-    int stp;
-    MatrixXi filtered;
-    int transformed;
+    double thr; /// threshold for the filter
+    int stp; /// number of steps for the FFT
+    MatrixXi filtered; /// the filtered matrix
+    int transformed; /// flag if the transform has been applied
 
 public:
+    /**
+     * @brief Construct a new Lowpass Filter object
+     * 
+     * @param threshold Threshold value
+     * @param step Number of steps for the FFT
+     */
     explicit LowpassFilter(const double threshold, int step = 1);
+
+    /**
+     * @brief Apply the low pass flter
+     * 
+     * @param item Eigen matrix before filtering
+     * @return MatrixXi Eigen matrix after filtering
+     */
     MatrixXi transform(const MatrixXi& item) override;
 };
 
@@ -189,13 +243,26 @@ public:
  */
 class HighpassFilter : public Transform<MatrixXi,MatrixXi> {
 private:
-    double thr;
-    int stp;
-    MatrixXi filtered;
-    int transformed;
+    double thr; /// threshold for the filter
+    int stp; /// number of steps for the FFT
+    MatrixXi filtered; /// the filtered matrix
+    int transformed; /// flag if the transform has been applied
 
 public:
+    /**
+     * @brief Construct a new Lowpass Filter object
+     * 
+     * @param threshold Threshold value
+     * @param step Number of steps for the FFT
+     */
     explicit HighpassFilter(const double threshold, int step = 1);
+    
+    /**
+     * @brief Apply the low pass flter
+     * 
+     * @param item Eigen matrix before filtering
+     * @return MatrixXi Eigen matrix after filtering
+     */
     MatrixXi transform(const MatrixXi& item) override;
 };
 
